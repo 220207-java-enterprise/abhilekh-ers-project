@@ -35,7 +35,7 @@ public class ConnectionFactory {
     }
 
     // static method to get instance when class is loaded -> EAGER LOADING in Singleton Pattern
-    // will use this method to instantiate the class
+    // will use this method to instantiate the class.
     public static ConnectionFactory getInstance(){
         if (connectionFactory == null){
             connectionFactory = new ConnectionFactory();

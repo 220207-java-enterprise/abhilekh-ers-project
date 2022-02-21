@@ -21,9 +21,9 @@ public class TempDriver {
         }
 
         if (conn == null) {
-            System.out.println("Error");
+            System.out.println("Error!");
         } else {
-            System.out.println("Success");
+            System.out.println("Success!");
         }
     }
 }
