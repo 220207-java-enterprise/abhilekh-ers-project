@@ -7,7 +7,7 @@ public class User {
     private String email;
     private String password;
     private String givenName;
-    private String surName;
+    private String surname;
     private boolean isActive;
 
     // FK
@@ -18,14 +18,14 @@ public class User {
     }
 
     public User(String id, String username, String email,
-                String password, String givenName, String surName,
+                String password, String givenName, String surname,
                 boolean isActive, String roleId) {
         this.id = id;
         this.username = username;
         this.email = email;
         this.password = password;
         this.givenName = givenName;
-        this.surName = surName;
+        this.surname = surname;
         this.isActive = isActive;
         // FK
         this.roleId = roleId;
@@ -71,19 +71,19 @@ public class User {
         this.givenName = givenName;
     }
 
-    public String getSurName() {
-        return surName;
+    public String getSurname() {
+        return surname;
     }
 
-    public void setSurName(String surName) {
-        this.surName = surName;
+    public void setSurName(String surname) {
+        this.surname = surname;
     }
 
-    public boolean isActive() {
+    public boolean getIsActive() {
         return isActive;
     }
 
-    public void setActive(boolean active) {
+    public void setIsActive(boolean active) {
         isActive = active;
     }
 
