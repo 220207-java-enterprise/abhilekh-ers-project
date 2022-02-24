@@ -8,8 +8,7 @@ public class ReimbursementStatus {
 
     }
 
-    public ReimbursementStatus(String id, String status){
-        this.id = id;
+    public ReimbursementStatus(String status){
         this.status = status;
     }
 

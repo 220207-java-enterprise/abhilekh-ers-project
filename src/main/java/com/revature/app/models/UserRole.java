@@ -5,12 +5,13 @@ public class UserRole {
     private String id;
     private String role;
 
+    // add all users inside a list
+
     private UserRole(){
 
     }
 
-    private UserRole(String id, String role){
-        this.id = id;
+    private UserRole(String role){
         this.role = role;
     }
 

@@ -13,6 +13,8 @@ public class User {
     // FK
     private String roleId;
 
+    // SELECT * FROM users WHERE role_id=?
+
     public User(){
 
     }

@@ -9,8 +9,7 @@ public class ReimbursementType {
 
     }
 
-    public ReimbursementType(String id, String type) {
-        this.id = id;
+    public ReimbursementType(String type) {
         this.type = type;
     }
 
