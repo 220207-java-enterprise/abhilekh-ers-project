@@ -10,10 +10,7 @@ public class User {
     private String surname;
     private boolean isActive;
 
-    // FK
     private String roleId;
-
-    // SELECT * FROM users WHERE role_id=?
 
     public User(){
 
@@ -77,7 +74,7 @@ public class User {
         return surname;
     }
 
-    public void setSurName(String surname) {
+    public void setSurname(String surname) {
         this.surname = surname;
     }
 

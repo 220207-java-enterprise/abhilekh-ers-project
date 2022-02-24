@@ -10,11 +10,10 @@ public class Reimbursement {
     private Timestamp submitted;
     private Timestamp resolved;
     private String description;
-    private Blob blob;
-
+    private Blob receipt;
     private String paymentId;
-    // FK
 
+    private String authorId;
     private String resolverId;
     private String statusId;
     private String typeId;
@@ -25,14 +24,15 @@ public class Reimbursement {
 
     public Reimbursement(float amount, Timestamp submitted,
                          Timestamp resolved, String description,
-                         Blob blob, String paymentId,
+                         Blob receipt, String authorId, String paymentId,
                          String resolverId, String statusId,
                          String typeId) {
         this.amount = amount;
         this.submitted = submitted;
         this.resolved = resolved;
         this.description = description;
-        this.blob = blob;
+        this.receipt = receipt;
+        this.authorId = authorId;
         // FK
         this.paymentId = paymentId;
         this.resolverId = resolverId;
@@ -80,12 +80,12 @@ public class Reimbursement {
         this.description = description;
     }
 
-    public Blob getBlob() {
-        return blob;
+    public Blob getReceipt() {
+        return receipt;
     }
 
-    public void setBlob(Blob blob) {
-        this.blob = blob;
+    public void setReceipt(Blob receipt) {
+        this.receipt = receipt;
     }
 
     public String getPaymentId() {
@@ -94,6 +94,14 @@ public class Reimbursement {
 
     public void setPaymentId(String paymentId) {
         this.paymentId = paymentId;
+    }
+
+    public String getAuthorId() {
+        return authorId;
+    }
+
+    public void setAuthorId(String authorId) {
+        this.authorId = authorId;
     }
 
     public String getResolverId() {
