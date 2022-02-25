@@ -47,10 +47,9 @@ public class UserDAO  implements CrudDAO<User>{
         } catch (SQLException e){
             e.printStackTrace();
         }
-
     }
 
-    
+
     // ***************************************
     //  READ ONE USER BY ID
     // ***************************************
@@ -66,7 +65,6 @@ public class UserDAO  implements CrudDAO<User>{
             pstmt.setString(1, id);
 
             ResultSet rs = pstmt.executeQuery();
-            System.out.println(rs);
 
             if(rs.next()){
                 foundUser = new User();
@@ -130,6 +128,7 @@ public class UserDAO  implements CrudDAO<User>{
     // ***************************************
     @Override
     public void update(User updatedUser) {
+
 
         try (Connection conn = ConnectionFactory.getInstance().getConnection()){
 

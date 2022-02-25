@@ -7,16 +7,8 @@
 
     <groupId>com.revature</groupId>
     <artifactId>abhilekh-ers-project</artifactId>
-
-    <!--
-        Ex: 10.44.3
-        (A.B.C)
-            A = Major Version (breaking changes applied),
-            B = Minor Version (new features, no breaking changes),
-            C = Patch Version (hotfixes [bug/security])
-    -->
     <version>0.0.1</version>
-
+    <packaging>war</packaging>
 
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -38,7 +30,30 @@
             <scope>test</scope>
         </dependency>
 
+            <dependency>
+                <groupId>javax.servlet</groupId>
+                <artifactId>javax.servlet-api</artifactId>
+                <version>4.0.1</version>
+            </dependency>
+
     </dependencies>
 
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.tomcat.maven</groupId>
+                    <artifactId>tomcat7-maven-plugin</artifactId>
+                    <version>2.2</version>
+                    <configuration>
+                        <url>http://localhost:8080/manager/text</url>
+                        <server>LocalTomcat</server>
+                        <path>/ers-app</path>
+                        <update>true</update>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
 
 </project>
