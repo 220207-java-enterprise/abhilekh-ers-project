@@ -19,6 +19,10 @@ public class UserService {
     //      AUTHORIZATION METHODS
     // ====================================
 
+    // ***********************************
+    //      REGISTER USER
+    // ***********************************
+
     public User register(User newUser){
 
         if (!isUserValid(newUser)){
@@ -35,6 +39,10 @@ public class UserService {
 
         return newUser;
     }
+
+    // ***********************************
+    //      LOGIN USER
+    // ***********************************
 
     public User login(String username, String password){
 
