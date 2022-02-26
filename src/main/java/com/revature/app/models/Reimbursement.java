@@ -2,6 +2,7 @@ package com.revature.app.models;
 
 import java.sql.Blob;
 import java.sql.Timestamp;
+import java.util.Objects;
 
 public class Reimbursement {
 
@@ -126,5 +127,35 @@ public class Reimbursement {
 
     public void setTypeId(String typeId) {
         this.typeId = typeId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Reimbursement that = (Reimbursement) o;
+        return Float.compare(that.amount, amount) == 0 && Objects.equals(id, that.id) && Objects.equals(submitted, that.submitted) && Objects.equals(resolved, that.resolved) && Objects.equals(description, that.description) && Objects.equals(receipt, that.receipt) && Objects.equals(paymentId, that.paymentId) && Objects.equals(authorId, that.authorId) && Objects.equals(resolverId, that.resolverId) && Objects.equals(statusId, that.statusId) && Objects.equals(typeId, that.typeId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, amount, submitted, resolved, description, receipt, paymentId, authorId, resolverId, statusId, typeId);
+    }
+
+    @Override
+    public String toString() {
+        return "Reimbursement{" +
+                "id='" + id + '\'' +
+                ", amount=" + amount +
+                ", submitted=" + submitted +
+                ", resolved=" + resolved +
+                ", description='" + description + '\'' +
+                ", receipt=" + receipt +
+                ", paymentId='" + paymentId + '\'' +
+                ", authorId='" + authorId + '\'' +
+                ", resolverId='" + resolverId + '\'' +
+                ", statusId='" + statusId + '\'' +
+                ", typeId='" + typeId + '\'' +
+                '}';
     }
 }
