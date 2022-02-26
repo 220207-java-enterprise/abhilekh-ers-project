@@ -25,8 +25,9 @@ public class UserService {
 
     public User register(User newUser){
 
-        if (!isUserValid(newUser)){
-            throw new InvalidRequestException("Bad Registration details given");
+        System.out.println("checking validations...");
+        if (!isValidUser(newUser)){
+            throw new RuntimeException("Invalid Registration information provided.");
         }
 
         // TODO validate that the email and username are unique
@@ -37,6 +38,7 @@ public class UserService {
 
         userDAO.save(newUser);
 
+        System.out.printf("Registration info provided: %s\n", newUser.toString());
         return newUser;
     }
 
@@ -65,21 +67,31 @@ public class UserService {
     // ====================================
     //      VALIDATION METHODS
     // ====================================
-    private boolean isUserValid(User user){
+    public boolean isValidUser(User user){
 
+        // check first and last name are not empty or filled with white space
         if(user.getGivenName().trim().equals("") || user.getSurname().trim().equals("")){
+            System.out.println("Bad first/last name");
             return false;
         }
 
         if (!isUsernameValid(user.getUsername())){
+            System.out.println("Bad username");
             return false;
         }
 
         if (!isPasswordValid(user.getPassword())){
+            System.out.println("Bad Password");
             return false;
         }
 
-        return isEmailValid(user.getEmail());
+        if (!isEmailValid(user.getEmail())){
+            System.out.println("Bad Email");
+            return false;
+        }
+
+        System.out.println("Valid information was provided.");
+        return true;
     }
 
     public boolean isUsernameValid(String username) {
@@ -88,7 +100,7 @@ public class UserService {
     }
 
     public boolean isPasswordValid(String password) {
-        return password.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$");
+        return password.matches("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$");
     }
 
     public boolean isEmailValid(String email) {

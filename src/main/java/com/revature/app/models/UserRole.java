@@ -7,11 +7,10 @@ public class UserRole {
 
     // add all users inside a list
 
-    private UserRole(){
-
+    public UserRole(){
     }
 
-    private UserRole(String role){
+    public UserRole(String role){
         this.role = role;
     }
 

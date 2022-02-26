@@ -18,10 +18,9 @@ public class User {
 
     }
 
-    public User(String id, String username, String email,
+    public User(String username, String email,
                 String password, String givenName, String surname,
                 boolean isActive, String roleId) {
-        this.id = id;
         this.username = username;
         this.email = email;
         this.password = password;
