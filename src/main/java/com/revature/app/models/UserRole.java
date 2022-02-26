@@ -1,16 +1,18 @@
 package com.revature.app.models;
 
-public class ReimbursementStatus {
-    private String id;
-    private String status;
+public class UserRole {
 
-    public ReimbursementStatus(){
+    private String id;
+    private String role;
+
+    // add all users inside a list
+
+    private UserRole(){
 
     }
 
-    public ReimbursementStatus(String id, String status){
-        this.id = id;
-        this.status = status;
+    private UserRole(String role){
+        this.role = role;
     }
 
     public String getId() {
@@ -21,12 +23,12 @@ public class ReimbursementStatus {
         this.id = id;
     }
 
-    public String getStatus() {
-        return status;
+    public String getRole() {
+        return role;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setRole(String role) {
+        this.role = role;
     }
 
     @Override
@@ -44,5 +46,3 @@ public class ReimbursementStatus {
         return super.toString();
     }
 }
-
-

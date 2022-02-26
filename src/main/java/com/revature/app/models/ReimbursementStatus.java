@@ -1,17 +1,15 @@
 package com.revature.app.models;
 
-public class ReimbursementType {
-
+public class ReimbursementStatus {
     private String id;
-    private String type;
+    private String status;
 
-    public ReimbursementType(){
+    public ReimbursementStatus(){
 
     }
 
-    public ReimbursementType(String id, String type) {
-        this.id = id;
-        this.type = type;
+    public ReimbursementStatus(String status){
+        this.status = status;
     }
 
     public String getId() {
@@ -22,12 +20,12 @@ public class ReimbursementType {
         this.id = id;
     }
 
-    public String getType() {
-        return type;
+    public String getStatus() {
+        return status;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     @Override
@@ -45,3 +43,5 @@ public class ReimbursementType {
         return super.toString();
     }
 }
+
+

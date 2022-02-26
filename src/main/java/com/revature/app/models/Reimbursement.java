@@ -1,16 +1,19 @@
 package com.revature.app.models;
 
+import java.sql.Blob;
+import java.sql.Timestamp;
+
 public class Reimbursement {
 
     private String id;
     private float amount;
-    private String submitted;
-    private String resolved;
+    private Timestamp submitted;
+    private Timestamp resolved;
     private String description;
-    private String blob;
-
-    // FK
+    private Blob receipt;
     private String paymentId;
+
+    private String authorId;
     private String resolverId;
     private String statusId;
     private String typeId;
@@ -19,17 +22,17 @@ public class Reimbursement {
 
     }
 
-    public Reimbursement(String id, float amount, String submitted,
-                         String resolved, String description,
-                         String blob, String paymentId,
+    public Reimbursement(float amount, Timestamp submitted,
+                         Timestamp resolved, String description,
+                         Blob receipt, String authorId, String paymentId,
                          String resolverId, String statusId,
                          String typeId) {
-        this.id = id;
         this.amount = amount;
         this.submitted = submitted;
         this.resolved = resolved;
         this.description = description;
-        this.blob = blob;
+        this.receipt = receipt;
+        this.authorId = authorId;
         // FK
         this.paymentId = paymentId;
         this.resolverId = resolverId;
@@ -53,19 +56,19 @@ public class Reimbursement {
         this.amount = amount;
     }
 
-    public String getSubmitted() {
+    public Timestamp getSubmitted() {
         return submitted;
     }
 
-    public void setSubmitted(String submitted) {
+    public void setSubmitted(Timestamp submitted) {
         this.submitted = submitted;
     }
 
-    public String getResolved() {
+    public Timestamp getResolved() {
         return resolved;
     }
 
-    public void setResolved(String resolved) {
+    public void setResolved(Timestamp resolved) {
         this.resolved = resolved;
     }
 
@@ -77,12 +80,12 @@ public class Reimbursement {
         this.description = description;
     }
 
-    public String getBlob() {
-        return blob;
+    public Blob getReceipt() {
+        return receipt;
     }
 
-    public void setBlob(String blob) {
-        this.blob = blob;
+    public void setReceipt(Blob receipt) {
+        this.receipt = receipt;
     }
 
     public String getPaymentId() {
@@ -91,6 +94,14 @@ public class Reimbursement {
 
     public void setPaymentId(String paymentId) {
         this.paymentId = paymentId;
+    }
+
+    public String getAuthorId() {
+        return authorId;
+    }
+
+    public void setAuthorId(String authorId) {
+        this.authorId = authorId;
     }
 
     public String getResolverId() {

@@ -1,17 +1,16 @@
 package com.revature.app.models;
 
-public class UserRole {
+public class ReimbursementType {
 
     private String id;
-    private String role;
+    private String type;
 
-    private UserRole(){
+    public ReimbursementType(){
 
     }
 
-    private UserRole(String id, String role){
-        this.id = id;
-        this.role = role;
+    public ReimbursementType(String type) {
+        this.type = type;
     }
 
     public String getId() {
@@ -22,12 +21,12 @@ public class UserRole {
         this.id = id;
     }
 
-    public String getRole() {
-        return role;
+    public String getType() {
+        return type;
     }
 
-    public void setRole(String role) {
-        this.role = role;
+    public void setType(String type) {
+        this.type = type;
     }
 
     @Override
