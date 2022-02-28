@@ -232,6 +232,9 @@ public class UserDAO  implements CrudDAO<User>{
         return null;
     }
 
+    // ***************************************
+    //  GET USER BY USERNAME
+    // ***************************************
     public User findUserByUsername(String username){
 
         User authUser = null;
@@ -241,6 +244,39 @@ public class UserDAO  implements CrudDAO<User>{
             PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM users WHERE username=?");
 
             pstmt.setString(1, username);
+
+            ResultSet rs = pstmt.executeQuery();
+
+            if(rs.next()){
+                authUser = new User();
+                authUser.setId(rs.getString("id"));
+                authUser.setUsername(rs.getString("username"));
+                authUser.setEmail(rs.getString("email"));
+                authUser.setPassword(rs.getString("password"));
+                authUser.setGivenName(rs.getString("given_name"));
+                authUser.setSurname(rs.getString("surname"));
+                authUser.setIsActive(rs.getBoolean("is_active"));
+                authUser.setRoleId(rs.getString("role_id"));
+            }
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+
+        return authUser;
+    }
+
+    // ***************************************
+    //  GET USER BY EMAIL
+    // ***************************************
+    public User findUserByEmail(String email){
+
+        User authUser = null;
+
+        try (Connection conn = ConnectionFactory.getInstance().getConnection()){
+
+            PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM users WHERE username=?");
+
+            pstmt.setString(1, email);
 
             ResultSet rs = pstmt.executeQuery();
 
