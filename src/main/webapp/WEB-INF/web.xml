@@ -6,4 +6,8 @@
 
     <display-name>ERS Application!</display-name>
 
+    <listener>
+        <listener-class>com.revature.app.util.ContextLoaderListener</listener-class>
+    </listener>
+
 </web-app>
