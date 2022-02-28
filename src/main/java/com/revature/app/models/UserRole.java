@@ -10,9 +10,11 @@ public class UserRole {
     // add all users inside a list
 
     public UserRole(){
+        super();
     }
 
-    public UserRole(String role){
+    public UserRole(String id, String role){
+        this.id=id;
         this.role = role;
     }
 

@@ -9,8 +9,8 @@ create table users(
 	username	VARCHAR unique not null,
 	email		VARCHAR unique not null,
 	password	VARCHAR not null,
-	given_name	VARCHAR unique not null,
-	surname		VARCHAR unique not null,
+	given_name	VARCHAR not null,
+	surname		VARCHAR not null,
 	is_active 	BOOLEAN,
 	--FK
 	role_id		VARCHAR, 

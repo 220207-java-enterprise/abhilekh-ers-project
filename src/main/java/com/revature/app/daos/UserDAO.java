@@ -237,7 +237,7 @@ public class UserDAO  implements CrudDAO<User>{
     // ***************************************
     public User findUserByUsername(String username){
 
-        User authUser = null;
+        User foundUser = null;
 
         try (Connection conn = ConnectionFactory.getInstance().getConnection()){
 
@@ -248,54 +248,54 @@ public class UserDAO  implements CrudDAO<User>{
             ResultSet rs = pstmt.executeQuery();
 
             if(rs.next()){
-                authUser = new User();
-                authUser.setId(rs.getString("id"));
-                authUser.setUsername(rs.getString("username"));
-                authUser.setEmail(rs.getString("email"));
-                authUser.setPassword(rs.getString("password"));
-                authUser.setGivenName(rs.getString("given_name"));
-                authUser.setSurname(rs.getString("surname"));
-                authUser.setIsActive(rs.getBoolean("is_active"));
-                authUser.setRoleId(rs.getString("role_id"));
+                foundUser = new User();
+                foundUser.setId(rs.getString("id"));
+                foundUser.setUsername(rs.getString("username"));
+                foundUser.setEmail(rs.getString("email"));
+                foundUser.setPassword(rs.getString("password"));
+                foundUser.setGivenName(rs.getString("given_name"));
+                foundUser.setSurname(rs.getString("surname"));
+                foundUser.setIsActive(rs.getBoolean("is_active"));
+                foundUser.setRoleId(rs.getString("role_id"));
             }
         } catch (SQLException e){
             e.printStackTrace();
         }
 
-        return authUser;
+        return foundUser;
     }
 
     // ***************************************
-    //  GET USER BY EMAIL
+    //  GET USER BY USERNAME
     // ***************************************
     public User findUserByEmail(String email){
 
-        User authUser = null;
+        User foundUser = null;
 
         try (Connection conn = ConnectionFactory.getInstance().getConnection()){
 
-            PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM users WHERE username=?");
+            PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM users WHERE email=?");
 
             pstmt.setString(1, email);
 
             ResultSet rs = pstmt.executeQuery();
 
             if(rs.next()){
-                authUser = new User();
-                authUser.setId(rs.getString("id"));
-                authUser.setUsername(rs.getString("username"));
-                authUser.setEmail(rs.getString("email"));
-                authUser.setPassword(rs.getString("password"));
-                authUser.setGivenName(rs.getString("given_name"));
-                authUser.setSurname(rs.getString("surname"));
-                authUser.setIsActive(rs.getBoolean("is_active"));
-                authUser.setRoleId(rs.getString("role_id"));
+                foundUser = new User();
+                foundUser.setId(rs.getString("id"));
+                foundUser.setUsername(rs.getString("username"));
+                foundUser.setEmail(rs.getString("email"));
+                foundUser.setPassword(rs.getString("password"));
+                foundUser.setGivenName(rs.getString("given_name"));
+                foundUser.setSurname(rs.getString("surname"));
+                foundUser.setIsActive(rs.getBoolean("is_active"));
+                foundUser.setRoleId(rs.getString("role_id"));
             }
         } catch (SQLException e){
             e.printStackTrace();
         }
 
-        return authUser;
+        return foundUser;
     }
 }
 

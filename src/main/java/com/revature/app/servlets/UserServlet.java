@@ -1,10 +1,13 @@
 package com.revature.app.servlets;
 
+import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.app.dtos.NewUserRequest;
 import com.revature.app.dtos.ResourceCreationResponse;
 import com.revature.app.models.User;
 import com.revature.app.services.UserService;
+import com.revature.app.util.exceptions.InvalidRequestException;
+import com.revature.app.util.exceptions.ResourceConflictException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -12,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Map;
 
 
 // Mapping: /users/*
@@ -21,13 +25,22 @@ public class UserServlet extends HttpServlet {
     private final ObjectMapper mapper;
 
     public UserServlet(UserService userService, ObjectMapper mapper){
-        this.userService = userService; this.mapper=mapper;
+        this.userService = userService;
+        this.mapper=mapper;
     }
 
     // Get all or one User endpoint
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        resp.getWriter().write("<h1>/get users works!</h1>");
+
+        if(req.getRequestURI().split("/")[3].equals("availability")){
+            checkAvailability(req, resp);
+            return;
+        }
+
+        // todo implement security logic here to protect sensitive operations
+
+        resp.setStatus(200);
     }
 
     // Register a User endpoint
@@ -43,16 +56,37 @@ public class UserServlet extends HttpServlet {
             // next line expects newUserRequest to have a no args constructor
             NewUserRequest newUserRequest = mapper.readValue(req.getInputStream(), NewUserRequest.class);
             User newUser = userService.register(newUserRequest);
-            resp.setStatus(201); // new User successfully created
+            resp.setStatus(201); // CREATED
             resp.setContentType("application/json");
             String payload = mapper.writeValueAsString(new ResourceCreationResponse(newUser.getId()));
             respWriter.write(payload);
 
-        } catch(Exception e){
-            // todo make more catch blocks for different exceptions
-            e.printStackTrace();
-            resp.setStatus(500); // internal server error
+        } catch (InvalidRequestException | DatabindException e) {
+            resp.setStatus(400); // BAD REQUEST
+        } catch (ResourceConflictException e) {
+            resp.setStatus(409); // CONFLICT
+        } catch (Exception e) {
+            e.printStackTrace(); // include for debugging purposes; ideally log it to a file
+            resp.setStatus(500);
         }
 
+    }
+
+    protected void checkAvailability(HttpServletRequest req, HttpServletResponse resp){
+        String usernameValue = req.getParameter("username");
+        String emailValue = req.getParameter("email");
+        if(usernameValue != null){
+            if(userService.isUsernameAvailable(usernameValue)){
+                resp.setStatus(204); // No content in body
+            } else{
+                resp.setStatus(409); // Conflict
+            }
+        } else if (emailValue != null){
+            if(userService.isEmailAvailable(emailValue)){
+                resp.setStatus(204); // No content in body
+            } else{
+                resp.setStatus(409); // Conflict
+            }
+        }
     }
 }

@@ -6,10 +6,6 @@ public class ResourceCreationResponse {
 
     private String id;
 
-    public ResourceCreationResponse(){
-
-    }
-
     public ResourceCreationResponse(String id){
         this.id = id;
     }

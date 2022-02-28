@@ -11,11 +11,10 @@ public class User {
     private String givenName;
     private String surname;
     private boolean isActive;
-
     private String roleId;
 
     public User(){
-
+        super();
     }
 
     public User(String username, String email,
