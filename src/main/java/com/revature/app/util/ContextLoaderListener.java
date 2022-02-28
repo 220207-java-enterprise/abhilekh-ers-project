@@ -1,5 +1,6 @@
 package com.revature.app.util;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.app.daos.UserDAO;
 import com.revature.app.services.UserService;
 import com.revature.app.servlets.AuthServlet;
@@ -15,13 +16,16 @@ public class ContextLoaderListener implements ServletContextListener {
     public void contextInitialized(ServletContextEvent sce) {
         System.out.println("Initializing ERS web application");
 
+        // object mapper
+        ObjectMapper mapper = new ObjectMapper();
+
         // wiring together dao, service, servlets
         UserDAO userDAO = new UserDAO();
         UserService userService = new UserService(userDAO);
 
         // servlets
-        UserServlet userServlet = new UserServlet(userService);
-        AuthServlet authServlet = new AuthServlet(userService);
+        UserServlet userServlet = new UserServlet(userService, mapper);
+        AuthServlet authServlet = new AuthServlet(userService, mapper);
 
         // Programmatic Servlet Registration - connects UserServlet to ContextLoaderListener
         ServletContext context = sce.getServletContext();

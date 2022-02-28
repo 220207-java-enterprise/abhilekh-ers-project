@@ -1,6 +1,7 @@
 package com.revature.app.services;
 
 import com.revature.app.daos.UserDAO;
+import com.revature.app.dtos.NewUserRequest;
 import com.revature.app.models.User;
 import com.revature.app.util.exceptions.AuthenticationException;
 import com.revature.app.util.exceptions.InvalidRequestException;
@@ -24,7 +25,11 @@ public class UserService {
     //      REGISTER USER
     // ***********************************
 
-    public User register(User newUser){
+    public User register(NewUserRequest newUserRequest){
+
+
+        // map dto and models using extractUser()
+        User newUser = newUserRequest.extractUser();
 
         System.out.println("checking validations...");
         if (!isValidUser(newUser)){
