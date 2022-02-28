@@ -19,7 +19,7 @@ public class ContextLoaderListener implements ServletContextListener {
         UserService userService = new UserService(userDAO);
         UserServlet userServlet = new UserServlet(userService);
 
-        // Programmatic Servlet Registration
+        // Programmatic Servlet Registration - connects UserServlet to ContextLoaderListener
         ServletContext context = sce.getServletContext();
         context.addServlet("UserServlet", userServlet).addMapping("/users/*");
 

@@ -18,9 +18,11 @@ public class UserServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        resp.getWriter().write("<h1>/users works!</h1>");
+        resp.getWriter().write("<h1>/get users works!</h1>");
+    }
 
-        System.out.println(userService.isEmailValid("email"));
-
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        resp.getWriter().write("<h1>/post users works!</h1>");
     }
 }
