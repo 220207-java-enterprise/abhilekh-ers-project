@@ -1,4 +1,4 @@
-package com.revature.app.dtos;
+package com.revature.app.dtos.responses;
 
 
 // we will create json responses with id of new objects

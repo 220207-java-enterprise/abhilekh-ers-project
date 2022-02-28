@@ -1,12 +1,12 @@
 package com.revature.app.services;
 
 import com.revature.app.daos.UserDAO;
-import com.revature.app.dtos.NewUserRequest;
+import com.revature.app.dtos.requests.LoginRequest;
+import com.revature.app.dtos.requests.NewUserRequest;
 import com.revature.app.models.User;
 import com.revature.app.util.exceptions.AuthenticationException;
 import com.revature.app.util.exceptions.InvalidRequestException;
 import com.revature.app.util.exceptions.ResourceConflictException;
-import com.revature.app.util.exceptions.ResourcePersistenceException;
 
 import java.util.UUID;
 
@@ -57,7 +57,10 @@ public class UserService {
     //      LOGIN USER
     // ***********************************
 
-    public User login(String username, String password){
+    public User login(LoginRequest loginRequest){
+
+        String username = loginRequest.getUsername();
+        String password = loginRequest.getPassword();
 
         if (!isUsernameValid(username) || !isPasswordValid(password)){
             throw new InvalidRequestException("Invalid credentials provided");

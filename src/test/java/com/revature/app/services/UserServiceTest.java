@@ -2,7 +2,8 @@ package com.revature.app.services;
 
 import com.revature.app.daos.UserDAO;
 
-import com.revature.app.dtos.NewUserRequest;
+import com.revature.app.dtos.requests.LoginRequest;
+import com.revature.app.dtos.requests.NewUserRequest;
 import com.revature.app.models.User;
 import com.revature.app.util.exceptions.InvalidRequestException;
 import org.junit.Assert;
@@ -100,10 +101,11 @@ public class UserServiceTest {
         //Arrange
         String unknownUsername = "unknownuser";
         String somePassword = "p4$$WORD";
+        LoginRequest loginRequest = new LoginRequest(unknownUsername, somePassword);
         when(mockUserDao.findUserByUsernameAndPassword(unknownUsername, somePassword)).thenReturn(null);
 
         //Act
-        sut.login(unknownUsername, somePassword);
+        sut.login(loginRequest);
     }
 
     @Test(expected = InvalidRequestException.class)
@@ -111,10 +113,10 @@ public class UserServiceTest {
         // Arrange
         String invalidUsername = "no";
         String validPassword = "p4$$word";
-
+        LoginRequest loginRequest = new LoginRequest(invalidUsername, validPassword);
         //Act
         try {
-            sut.login(invalidUsername, validPassword);
+            sut.login(loginRequest);
         } finally {
             // proof that findUserByUsernameAndPassword is invoked 0 times - it was "mocked"
             verify(mockUserDao, times(0)).findUserByUsernameAndPassword(invalidUsername, validPassword);
@@ -126,10 +128,10 @@ public class UserServiceTest {
         // Arrange
         String validUsername = "4bhilekh";
         String invalidPassword = "invalid";
-
+        LoginRequest loginRequest = new LoginRequest(validUsername, invalidPassword);
         //Act
         try {
-            sut.login(validUsername, invalidPassword);
+            sut.login(loginRequest);
         } finally {
             // proof that findUserByUsernameAndPassword is invoked 0 times - it was "mocked"
             verify(mockUserDao, times(0)).findUserByUsernameAndPassword(validUsername, invalidPassword);
@@ -139,19 +141,21 @@ public class UserServiceTest {
     @Test
     public void test_login_returnsAuthenticatedAppUser_givenValidAndKnownCredentials(){
 
-
-
         // Arrange
         UserService spiedSut = Mockito.spy(sut);
 
         String validUsername = "4bhilekh";
         String validPassword = "p4$$word";
 
+        LoginRequest loginRequest = new LoginRequest(validUsername, validPassword);
         when(spiedSut.isUsernameValid(validUsername)).thenReturn(true);
-
 
         // Act
         when(mockUserDao.findUserByUsernameAndPassword(validUsername, validPassword)).thenReturn(new User());
+        User authUserRequest = spiedSut.login(loginRequest);
+
+        //Assert
+        assertNotNull(authUserRequest);
     }
 
     @Test
@@ -233,10 +237,10 @@ public class UserServiceTest {
 //        NewUserRequest invalidUserRequest = new NewUserRequest("username", "email@email", "password", "sdas", "dfdf",
 //                true, "3");
 //
-//        User userToSave = invalidUser;
-//        doThrow().when(mockUserDao).save(invalidUser);
+//        User userToSave = invalidUserRequest.extractUser();
+//        doThrow().when(mockUserDao).save(userToSave);
 //
-//        sut.register(invalidUser);
+//        sut.register(userToSave);
 //    }
 //
 //    @Test

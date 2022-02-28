@@ -2,8 +2,8 @@ package com.revature.app.servlets;
 
 import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.revature.app.dtos.NewUserRequest;
-import com.revature.app.dtos.ResourceCreationResponse;
+import com.revature.app.dtos.requests.NewUserRequest;
+import com.revature.app.dtos.responses.ResourceCreationResponse;
 import com.revature.app.models.User;
 import com.revature.app.services.UserService;
 import com.revature.app.util.exceptions.InvalidRequestException;
@@ -15,7 +15,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Map;
 
 
 // Mapping: /users/*
@@ -55,13 +54,17 @@ public class UserServlet extends HttpServlet {
 
             // next line expects newUserRequest to have a no args constructor
             NewUserRequest newUserRequest = mapper.readValue(req.getInputStream(), NewUserRequest.class);
+            System.out.println("NEW USER REQUEST--------------> "+newUserRequest.toString());
             User newUser = userService.register(newUserRequest);
+            System.out.println("NEW USER--------------> "+newUser.toString());
             resp.setStatus(201); // CREATED
             resp.setContentType("application/json");
             String payload = mapper.writeValueAsString(new ResourceCreationResponse(newUser.getId()));
+            System.out.println("PAYLOAD--------------> " + payload);
             respWriter.write(payload);
 
         } catch (InvalidRequestException | DatabindException e) {
+            e.printStackTrace();
             resp.setStatus(400); // BAD REQUEST
         } catch (ResourceConflictException e) {
             resp.setStatus(409); // CONFLICT

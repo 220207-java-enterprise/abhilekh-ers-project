@@ -1,5 +1,6 @@
-package com.revature.app.dtos;
+package com.revature.app.dtos.requests;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.revature.app.models.User;
 
 public class NewUserRequest {
@@ -11,6 +12,7 @@ public class NewUserRequest {
     private String password;
     private String givenName;
     private String surname;
+    //@JsonProperty("isActive") // will handle automated getter/setter
     private boolean isActive;
     private String roleId;
 
@@ -69,11 +71,11 @@ public class NewUserRequest {
         this.surname = surname;
     }
 
-    public boolean isActive() {
+    public boolean getIsActive() {
         return isActive;
     }
 
-    public void setActive(boolean active) {
+    public void setIsActive(boolean active) {
         isActive = active;
     }
 

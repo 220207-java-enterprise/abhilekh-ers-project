@@ -2,7 +2,7 @@ package com.revature.app;
 
 
 import com.revature.app.daos.UserDAO;
-import com.revature.app.dtos.NewUserRequest;
+import com.revature.app.dtos.requests.NewUserRequest;
 import com.revature.app.models.User;
 import com.revature.app.services.UserService;
 
