@@ -2,6 +2,7 @@ package com.revature.app.services;
 
 import com.revature.app.daos.UserDAO;
 
+import com.revature.app.dtos.NewUserRequest;
 import com.revature.app.models.User;
 import com.revature.app.util.exceptions.InvalidRequestException;
 import org.junit.Assert;
@@ -229,8 +230,10 @@ public class UserServiceTest {
     @Test(expected = RuntimeException.class)
     public void test_registration_throwsRuntimeException_givenInvalidUser(){
 
-        User invalidUser = new User("username", "email@email", "password", "sdas", "dfdf", true, "3");
+        NewUserRequest invalidUserRequest = new NewUserRequest("username", "email@email", "password", "sdas", "dfdf",
+                true, "3");
 
+        User userToSave = invalidUser
         doThrow().when(mockUserDao).save(invalidUser);
 
         sut.register(invalidUser);

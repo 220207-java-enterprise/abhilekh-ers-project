@@ -17,13 +17,15 @@ public class NewUserRequest {
 
     public  NewUserRequest(){super();}
 
-    public NewUserRequest(String username, String email, String password, String givenName, String surname, boolean isActive) {
+    public NewUserRequest(String username, String email, String password, String givenName, String surname,
+                          boolean isActive, String roleId) {
         this.username = username;
         this.email = email;
         this.password = password;
         this.givenName = givenName;
         this.surname = surname;
         this.isActive = isActive;
+        this.roleId = roleId;
     }
 
     public String getUsername() {
