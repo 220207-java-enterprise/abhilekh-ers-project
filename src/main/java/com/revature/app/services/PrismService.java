@@ -1,5 +1,7 @@
 package com.revature.app.services;
 
+import com.revature.app.models.User;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -79,7 +81,7 @@ public class PrismService {
 
     public void authenticateOrganizationUsingPrism(){}
 
-    public void registerNewEmployeeUsingPrism(){}
+    public void registerNewEmployeeUsingPrism(User newUser){}
 
     public void postPaymentUsingPrism(){}
 

@@ -144,9 +144,10 @@ public class UserServiceTest {
         UserService spiedSut = Mockito.spy(sut);
 
         String validUsername = "4bhilekh";
+        String validPassword = "p4$$word";
+
         when(spiedSut.isUsernameValid(validUsername)).thenReturn(true);
 
-        String validPassword = "p4$$word";
 
         // Act
         when(mockUserDao.findUserByUsernameAndPassword(validUsername, validPassword)).thenReturn(new User());
