@@ -67,6 +67,7 @@ public class UserServlet extends HttpServlet {
             e.printStackTrace();
             resp.setStatus(400); // BAD REQUEST
         } catch (ResourceConflictException e) {
+            e.printStackTrace();
             resp.setStatus(409); // CONFLICT
         } catch (Exception e) {
             e.printStackTrace(); // include for debugging purposes; ideally log it to a file
