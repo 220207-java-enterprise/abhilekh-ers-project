@@ -7,6 +7,8 @@ import com.revature.app.util.exceptions.InvalidRequestException;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mockito;
+
 import static org.mockito.Mockito.*;
 import static org.junit.Assert.assertNotNull;
 
@@ -135,8 +137,15 @@ public class UserServiceTest {
 
     @Test
     public void test_login_returnsAuthenticatedAppUser_givenValidAndKnownCredentials(){
+
+
+
         // Arrange
+        UserService spiedSut = Mockito.spy(sut);
+
         String validUsername = "4bhilekh";
+        when(spiedSut.isUsernameValid(validUsername)).thenReturn(true);
+
         String validPassword = "p4$$word";
 
         // Act
@@ -231,7 +240,11 @@ public class UserServiceTest {
         //Arrange
         User validUser = new User("username", "email@email.com", "p4$$word", "john", "doe", true, "3");
 
-        doNothing().when(mockUserDao).save(validUser);
+        UserService spiedSut = Mockito.spy(sut);
+        when(spiedSut.isUsernameValid(validUser.getUsername())).thenReturn(true);
+        when(spiedSut.isPasswordValid(validUser.getPassword())).thenReturn(true);
+        when(spiedSut.isEmailValid(validUser.getEmail())).thenReturn(true);
+        when(spiedSut.isValidUser(validUser)).thenReturn(true);
 
         sut.register(validUser);
     }
