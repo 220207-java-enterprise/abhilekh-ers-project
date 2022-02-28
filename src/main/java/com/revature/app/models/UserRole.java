@@ -5,9 +5,8 @@ import java.util.Objects;
 public class UserRole {
 
     private String id;
-    private String role;
+    private String roleName;
 
-    // add all users inside a list
 
     public UserRole(){
         super();
@@ -15,7 +14,7 @@ public class UserRole {
 
     public UserRole(String id, String role){
         this.id=id;
-        this.role = role;
+        this.roleName = role;
     }
 
     public String getId() {
@@ -26,12 +25,12 @@ public class UserRole {
         this.id = id;
     }
 
-    public String getRole() {
-        return role;
+    public String getRoleName() {
+        return roleName;
     }
 
-    public void setRole(String role) {
-        this.role = role;
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
     }
 
     @Override
@@ -39,19 +38,19 @@ public class UserRole {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         UserRole userRole = (UserRole) o;
-        return Objects.equals(id, userRole.id) && Objects.equals(role, userRole.role);
+        return Objects.equals(id, userRole.id) && Objects.equals(roleName, userRole.roleName);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, role);
+        return Objects.hash(id, roleName);
     }
 
     @Override
     public String toString() {
         return "UserRole{" +
                 "id='" + id + '\'' +
-                ", role='" + role + '\'' +
+                ", role='" + roleName + '\'' +
                 '}';
     }
 }

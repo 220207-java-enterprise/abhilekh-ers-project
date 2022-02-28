@@ -4,6 +4,7 @@ import com.revature.app.daos.UserDAO;
 import com.revature.app.dtos.requests.LoginRequest;
 import com.revature.app.dtos.requests.NewUserRequest;
 import com.revature.app.models.User;
+import com.revature.app.models.UserRole;
 import com.revature.app.util.exceptions.AuthenticationException;
 import com.revature.app.util.exceptions.InvalidRequestException;
 import com.revature.app.util.exceptions.ResourceConflictException;
@@ -48,6 +49,7 @@ public class UserService {
         // TODO encrypt provided password before storing in the database
 
         newUser.setId(UUID.randomUUID().toString());
+        newUser.setRole(new UserRole("7c3521f5-ff75-4e8a-9913-01d15ee4da03","EMPLOYEE"));
         userDAO.save(newUser);
 
         return newUser;

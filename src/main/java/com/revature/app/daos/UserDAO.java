@@ -1,6 +1,7 @@
 package com.revature.app.daos;
 
 import com.revature.app.models.User;
+import com.revature.app.models.UserRole;
 import com.revature.app.util.ConnectionFactory;
 import com.revature.app.util.exceptions.ResourcePersistenceException;
 
@@ -9,10 +10,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
 
 public class UserDAO  implements CrudDAO<User>{
 
+    private final String rootSelect =
+                    "SELECT u.id, u.given_name, u.surname, u.email, u.username, u.password, u.role_id, ur.role, " +
+                            "u.is_active FROM users u JOIN user_roles ur ON u.role_id = ur.id ";
 
     //=============================================================================================================
     //      BASIC CRUD METHODS
@@ -36,7 +39,7 @@ public class UserDAO  implements CrudDAO<User>{
             pstmt.setString(5, newUser.getGivenName());
             pstmt.setString(6, newUser.getSurname());
             pstmt.setBoolean(7, newUser.getIsActive());
-            pstmt.setString(8, newUser.getRoleId());
+            pstmt.setString(8, newUser.getRole().getId());
 
             int rowsInserted = pstmt.executeUpdate();
 
@@ -60,7 +63,7 @@ public class UserDAO  implements CrudDAO<User>{
 
         try (Connection conn = ConnectionFactory.getInstance().getConnection()){
 
-            PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM users WHERE id=?");
+            PreparedStatement pstmt = conn.prepareStatement(rootSelect + "WHERE id=?");
 
             pstmt.setString(1, id);
 
@@ -75,7 +78,7 @@ public class UserDAO  implements CrudDAO<User>{
                 foundUser.setGivenName(rs.getString("given_name"));
                 foundUser.setSurname(rs.getString("surname"));
                 foundUser.setIsActive(rs.getBoolean("is_active"));
-                foundUser.setRoleId(rs.getString("role_id"));
+                foundUser.setRole(new UserRole(rs.getString("role_id"),rs.getString("role")));
             }
         } catch (SQLException e){
             e.printStackTrace();
@@ -95,21 +98,20 @@ public class UserDAO  implements CrudDAO<User>{
 
         try (Connection conn = ConnectionFactory.getInstance().getConnection()) {
 
-            PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM users");
+            PreparedStatement pstmt = conn.prepareStatement(rootSelect);
 
             User oneUser = null;
             ResultSet rs = pstmt.executeQuery();
 
             if (rs.next()) {
                 oneUser = new User();
-
                 oneUser.setId(rs.getString("id"));
                 oneUser.setUsername(rs.getString("username"));
                 oneUser.setEmail(rs.getString("email"));
                 oneUser.setPassword(rs.getString("password"));
                 oneUser.setGivenName(rs.getString("given_name"));
                 oneUser.setSurname(rs.getString("surname"));
-                oneUser.setRoleId(rs.getString("role_id"));
+                oneUser.setRole(new UserRole(rs.getString("role_id"),rs.getString("role")));
 
                 allUsers.add(oneUser);
             }
@@ -119,7 +121,6 @@ public class UserDAO  implements CrudDAO<User>{
         }
 
         return allUsers;
-
     }
 
 
@@ -143,7 +144,7 @@ public class UserDAO  implements CrudDAO<User>{
             pstmt.setString(4, updatedUser.getGivenName());
             pstmt.setString(5, updatedUser.getSurname());
             pstmt.setBoolean(6, updatedUser.getIsActive());
-            pstmt.setString(7, updatedUser.getRoleId());
+            pstmt.setString(7, updatedUser.getRole().getId());
             pstmt.setString(8, updatedUser.getId());
 
             int rowsInserted = pstmt.executeUpdate();
@@ -195,7 +196,7 @@ public class UserDAO  implements CrudDAO<User>{
 
         try (Connection conn = ConnectionFactory.getInstance().getConnection()){
 
-            PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM users WHERE username=? AND password=?");
+            PreparedStatement pstmt = conn.prepareStatement(rootSelect+"WHERE u.username=? AND u.password=?");
 
             pstmt.setString(1, username);
             pstmt.setString(2, password);
@@ -211,7 +212,7 @@ public class UserDAO  implements CrudDAO<User>{
                 authUser.setGivenName(rs.getString("given_name"));
                 authUser.setSurname(rs.getString("surname"));
                 authUser.setIsActive(rs.getBoolean("is_active"));
-                authUser.setRoleId(rs.getString("role_id"));
+                authUser.setRole(new UserRole(rs.getString("id"), rs.getString("role")));
             }
         } catch (SQLException e){
             e.printStackTrace();
@@ -241,7 +242,7 @@ public class UserDAO  implements CrudDAO<User>{
 
         try (Connection conn = ConnectionFactory.getInstance().getConnection()){
 
-            PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM users WHERE username=?");
+            PreparedStatement pstmt = conn.prepareStatement(rootSelect+"WHERE username=?");
 
             pstmt.setString(1, username);
 
@@ -256,7 +257,7 @@ public class UserDAO  implements CrudDAO<User>{
                 foundUser.setGivenName(rs.getString("given_name"));
                 foundUser.setSurname(rs.getString("surname"));
                 foundUser.setIsActive(rs.getBoolean("is_active"));
-                foundUser.setRoleId(rs.getString("role_id"));
+                foundUser.setRole(new UserRole(rs.getString("id"), rs.getString("role")));
             }
         } catch (SQLException e){
             e.printStackTrace();
@@ -274,7 +275,7 @@ public class UserDAO  implements CrudDAO<User>{
 
         try (Connection conn = ConnectionFactory.getInstance().getConnection()){
 
-            PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM users WHERE email=?");
+            PreparedStatement pstmt = conn.prepareStatement(rootSelect+"WHERE email=?");
 
             pstmt.setString(1, email);
 
@@ -289,7 +290,7 @@ public class UserDAO  implements CrudDAO<User>{
                 foundUser.setGivenName(rs.getString("given_name"));
                 foundUser.setSurname(rs.getString("surname"));
                 foundUser.setIsActive(rs.getBoolean("is_active"));
-                foundUser.setRoleId(rs.getString("role_id"));
+                foundUser.setRole(new UserRole(rs.getString("id"), rs.getString("role")));
             }
         } catch (SQLException e){
             e.printStackTrace();
