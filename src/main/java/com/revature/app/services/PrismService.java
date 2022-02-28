@@ -1,4 +1,4 @@
-package com.revature.app.prism;
+package com.revature.app.services;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -9,8 +9,11 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
-public class Driver {
-    public static void main(String[] args) {
+
+// WATCH LECTURE
+// 2-23-22 02:18:45PM -- LAST 5 MINUTES FOR BETTER UNDERSTANDING
+public class PrismService {
+    public void registerNewOrganizationUsingPrism(){
 
         // HIGH LEVEL - talking to prism without Servlets
         // set url to send request to, we make a connection, specify http method for our request, adding headers to
@@ -62,6 +65,7 @@ public class Driver {
                 }
 
                 // todo parse this JSON into something useful
+                // jackson will do it in the future
                 System.out.println(response);
             }
 
@@ -72,5 +76,11 @@ public class Driver {
         }
 
     }
+
+    public void authenticateOrganizationUsingPrism(){}
+
+    public void registerNewEmployeeUsingPrism(){}
+
+    public void postPaymentUsingPrism(){}
 
 }

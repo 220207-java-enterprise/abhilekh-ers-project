@@ -10,6 +10,7 @@ import java.util.UUID;
 public class UserService {
 
     private UserDAO userDAO;
+    private PrismService prismService;
 
     public UserService(UserDAO userDAO){
         this.userDAO = userDAO;
