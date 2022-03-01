@@ -15,11 +15,10 @@ import static org.mockito.Mockito.*;
 import static org.junit.Assert.assertNotNull;
 
 
-// Test Suite
-// A class that encapsulates one or more test methods (cases)
-// Because the package structure of our test directory mirrors the src directory,
-// Java's compiler and JVM look at this class as if it is in the same package as UserService.java
-
+// ******************************************************
+//  TEST CLASS SUITE FOR UserService
+//  encapsulates test cases for methods in UserService
+// ******************************************************
 public class UserServiceTest {
 
     // we can access UserService methods
@@ -231,30 +230,42 @@ public class UserServiceTest {
         Assert.assertTrue(result);
     }
 
-//    @Test(expected = RuntimeException.class)
-//    public void test_registration_throwsRuntimeException_givenInvalidUser(){
-//
-//        NewUserRequest invalidUserRequest = new NewUserRequest("username", "email@email", "password", "sdas", "dfdf",
-//                true, "3");
-//
-//        User userToSave = invalidUserRequest.extractUser();
-//        doThrow().when(mockUserDao).save(userToSave);
-//
-//        sut.register(userToSave);
-//    }
-//
-//    @Test
-//    public void test_registration_givenValidUser(){
-//        //Arrange
-//        User validUser = new User("username", "email@email.com", "p4$$word", "john", "doe", true, "3");
-//
-//        UserService spiedSut = Mockito.spy(sut);
-//        when(spiedSut.isUsernameValid(validUser.getUsername())).thenReturn(true);
-//        when(spiedSut.isPasswordValid(validUser.getPassword())).thenReturn(true);
-//        when(spiedSut.isEmailValid(validUser.getEmail())).thenReturn(true);
-//        when(spiedSut.isValidUser(validUser)).thenReturn(true);
-//
-//        sut.register(validUser);
-//    }
+    @Test(expected = RuntimeException.class)
+    public void test_registration_throwsRuntimeException_givenInvalidUser(){
+
+        UserService spiedSut = Mockito.spy(sut);
+        NewUserRequest invalidUserRequest = new NewUserRequest("username", "email@email", "password", "sdas", "dfdf",
+                true, "3");
+
+        User invalidUserToSave = invalidUserRequest.extractUser();
+
+        try {
+            spiedSut.register(invalidUserRequest);
+        } finally {
+            verify(spiedSut, times(1)).isValidUser(invalidUserToSave);
+            verify(spiedSut, times(0)).isUsernameAvailable(invalidUserToSave.getUsername());
+            verify(spiedSut, times(0)).isEmailAvailable(invalidUserToSave.getEmail());
+            verify(mockUserDao, times(0)).save(invalidUserToSave);
+        }
+    }
+
+    // test_register_handlesDataSourceException_givenDaoThrows()
+
+    @Test
+    public void test_registration_givenValidUser(){
+        //Arrange
+        NewUserRequest newUserRequest = new NewUserRequest("username", "email@email.com", "p4$$word", "john", "doe", true,
+                "3");
+
+        User validUser = newUserRequest.extractUser();
+
+        UserService spiedSut = Mockito.spy(sut);
+        when(spiedSut.isUsernameValid(validUser.getUsername())).thenReturn(true);
+        when(spiedSut.isPasswordValid(validUser.getPassword())).thenReturn(true);
+        when(spiedSut.isEmailValid(validUser.getEmail())).thenReturn(true);
+        when(spiedSut.isValidUser(validUser)).thenReturn(true);
+
+        doNothing().when(mockUserDao).save(validUser);
+    }
 
 }
