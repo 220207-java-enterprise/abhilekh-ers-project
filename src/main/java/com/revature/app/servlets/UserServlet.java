@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.app.dtos.requests.NewUserRequest;
 import com.revature.app.dtos.responses.Principal;
 import com.revature.app.dtos.responses.ResourceCreationResponse;
+import com.revature.app.dtos.responses.UserResponse;
 import com.revature.app.models.User;
 import com.revature.app.services.UserService;
 import com.revature.app.util.exceptions.InvalidRequestException;
@@ -57,7 +58,7 @@ public class UserServlet extends HttpServlet {
             resp.setStatus(403); // forbidden
         }
 
-        List<User> users = userService.getAllUsers();
+        List<UserResponse> users = userService.getAllUsers();
         System.out.println("ALL USERS--> " + users.toString());
 
         String payload = mapper.writeValueAsString(users);

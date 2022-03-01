@@ -3,6 +3,7 @@ package com.revature.app.services;
 import com.revature.app.daos.UserDAO;
 import com.revature.app.dtos.requests.LoginRequest;
 import com.revature.app.dtos.requests.NewUserRequest;
+import com.revature.app.dtos.responses.UserResponse;
 import com.revature.app.models.User;
 import com.revature.app.models.UserRole;
 import com.revature.app.util.exceptions.AuthenticationException;
@@ -85,8 +86,14 @@ public class UserService {
     // ***********************************
     //      GET ALL USERS
     // ***********************************
-    public List<User> getAllUsers(){
-        return userDAO.getAll();
+    public List<UserResponse> getAllUsers(){
+        List<User> users = userDAO.getAll();
+        List<UserResponse> userResponses = new ArrayList<>();
+
+        for (User user: users){
+            userResponses.add(new UserResponse(user));
+        }
+        return userResponses;
     }
 
     // ====================================
