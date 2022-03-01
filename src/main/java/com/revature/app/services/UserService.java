@@ -13,6 +13,7 @@ import com.revature.app.util.exceptions.ResourceConflictException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class UserService {
 
@@ -87,13 +88,27 @@ public class UserService {
     //      GET ALL USERS
     // ***********************************
     public List<UserResponse> getAllUsers(){
+
+        // **********************
+        // MAPPING USING STREAMS
+        //***********************
+        return userDAO.getAll()
+                .stream()
+                .map(UserResponse::new)
+                .collect(Collectors.toList());
+        
+        // *******************
+        // PRE JAVA-8 mapping
+        //********************
+
+        /*
         List<User> users = userDAO.getAll();
         List<UserResponse> userResponses = new ArrayList<>();
-
         for (User user: users){
             userResponses.add(new UserResponse(user));
         }
         return userResponses;
+        */
     }
 
     // ====================================
