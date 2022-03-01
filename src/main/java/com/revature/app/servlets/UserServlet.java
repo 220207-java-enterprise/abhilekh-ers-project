@@ -3,6 +3,7 @@ package com.revature.app.servlets;
 import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.app.dtos.requests.NewUserRequest;
+import com.revature.app.dtos.responses.Principal;
 import com.revature.app.dtos.responses.ResourceCreationResponse;
 import com.revature.app.models.User;
 import com.revature.app.services.UserService;
@@ -13,8 +14,10 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 
 
 // Mapping: /users/*
@@ -32,13 +35,36 @@ public class UserServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        if(req.getRequestURI().split("/")[3].equals("availability")){
+        String[] reqFrags = req.getRequestURI().split("/");
+        if(reqFrags.length==4 && reqFrags[3].equals("availability")){
             checkAvailability(req, resp);
             return;
         }
 
         // todo implement security logic here to protect sensitive operations
 
+        HttpSession session = req.getSession(false);
+
+        // if there is no session data, return 401 error
+        if (session == null){
+            resp.setStatus(401);
+            return;
+        }
+
+        Principal requester = (Principal) session.getAttribute("authUser");
+
+        if (!requester.getRole().equals("ADMIN")){
+            resp.setStatus(403); // forbidden
+        }
+
+        List<User> users = userService.getAllUsers();
+        System.out.println("ALL USERS--> " + users.toString());
+
+        String payload = mapper.writeValueAsString(users);
+        resp.setContentType("application/json");
+        resp.getWriter().write(payload);
+
+        // redeploying will destroy session and it's attributes
         resp.setStatus(200);
     }
 

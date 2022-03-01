@@ -9,6 +9,8 @@ import com.revature.app.util.exceptions.AuthenticationException;
 import com.revature.app.util.exceptions.InvalidRequestException;
 import com.revature.app.util.exceptions.ResourceConflictException;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class UserService {
@@ -79,6 +81,13 @@ public class UserService {
         return authUser;
     }
 
+
+    // ***********************************
+    //      GET ALL USERS
+    // ***********************************
+    public List<User> getAllUsers(){
+        return userDAO.getAll();
+    }
 
     // ====================================
     //      VALIDATION METHODS

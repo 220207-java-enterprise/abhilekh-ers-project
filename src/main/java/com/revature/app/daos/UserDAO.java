@@ -3,6 +3,7 @@ package com.revature.app.daos;
 import com.revature.app.models.User;
 import com.revature.app.models.UserRole;
 import com.revature.app.util.ConnectionFactory;
+import com.revature.app.util.exceptions.DataSourceException;
 import com.revature.app.util.exceptions.ResourcePersistenceException;
 
 import java.sql.Connection;
@@ -10,6 +11,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class UserDAO  implements CrudDAO<User>{
 
@@ -92,32 +94,27 @@ public class UserDAO  implements CrudDAO<User>{
     //  READ ALL USERS
     // ***************************************
     @Override
-    public ArrayList<User> getAll() {
+    public List<User> getAll() {
 
-        ArrayList<User> allUsers = new ArrayList<User>();
+        List<User> allUsers = new ArrayList<User>();
 
         try (Connection conn = ConnectionFactory.getInstance().getConnection()) {
 
-            PreparedStatement pstmt = conn.prepareStatement(rootSelect);
-
-            User oneUser = null;
-            ResultSet rs = pstmt.executeQuery();
-
-            if (rs.next()) {
-                oneUser = new User();
+            ResultSet rs = conn.createStatement().executeQuery(rootSelect);
+            while (rs.next()) {
+                User oneUser = new User();
                 oneUser.setId(rs.getString("id"));
                 oneUser.setUsername(rs.getString("username"));
                 oneUser.setEmail(rs.getString("email"));
                 oneUser.setPassword(rs.getString("password"));
                 oneUser.setGivenName(rs.getString("given_name"));
                 oneUser.setSurname(rs.getString("surname"));
+                oneUser.setIsActive(rs.getBoolean("is_active"));
                 oneUser.setRole(new UserRole(rs.getString("role_id"),rs.getString("role")));
-
                 allUsers.add(oneUser);
             }
-
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DataSourceException(e);
         }
 
         return allUsers;
