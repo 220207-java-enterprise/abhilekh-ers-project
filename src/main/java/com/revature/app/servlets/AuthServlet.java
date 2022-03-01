@@ -38,7 +38,7 @@ public class AuthServlet extends HttpServlet {
             Principal principal = new Principal(userService.login(loginRequest));
             String payload = mapper.writeValueAsString(principal);  // payload will be a Principal Object
 
-            // Stateful session management
+            // Stateful session management - will change to token based session management
             // server will remember who logged in and store a value
             HttpSession httpSession = req.getSession();
             httpSession.setAttribute("authUser", principal);

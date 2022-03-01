@@ -69,6 +69,10 @@ public class UserServlet extends HttpServlet {
         resp.setStatus(200);
     }
 
+    // Update a User
+//    @Override
+//    protected void doUpdat
+
     // Register a User endpoint
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

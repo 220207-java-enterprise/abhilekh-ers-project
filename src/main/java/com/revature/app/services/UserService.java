@@ -90,13 +90,13 @@ public class UserService {
     public List<UserResponse> getAllUsers(){
 
         // **********************
-        // MAPPING USING STREAMS
+        // MAPPING USING STREAMS        //todo order allUsers using comparable/comparators
         //***********************
         return userDAO.getAll()
                 .stream()
                 .map(UserResponse::new)
                 .collect(Collectors.toList());
-        
+
         // *******************
         // PRE JAVA-8 mapping
         //********************

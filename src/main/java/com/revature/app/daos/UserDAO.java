@@ -129,7 +129,6 @@ public class UserDAO  implements CrudDAO<User>{
     @Override
     public void update(User updatedUser) {
 
-
         try (Connection conn = ConnectionFactory.getInstance().getConnection()){
 
             PreparedStatement pstmt = conn.prepareStatement(
