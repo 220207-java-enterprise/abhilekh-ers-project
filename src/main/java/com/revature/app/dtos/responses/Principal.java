@@ -13,10 +13,10 @@ public class Principal {
     public Principal(){
     }
 
-    public Principal(User user) {
-        this.id = user.getId();
-        this.username = user.getUsername();
-        this.role = user.getRole().getRoleName();
+    public Principal(User authUser) {
+        this.id = authUser.getId();
+        this.username = authUser.getUsername();
+        this.role = authUser.getRole().getRoleName();
     }
 
     public String getId() {

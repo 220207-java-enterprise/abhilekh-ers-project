@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.app.dtos.requests.LoginRequest;
 import com.revature.app.dtos.responses.Principal;
+import com.revature.app.services.TokenService;
 import com.revature.app.services.UserService;
 import com.revature.app.util.exceptions.AuthenticationException;
 import com.revature.app.util.exceptions.InvalidRequestException;
@@ -18,10 +19,12 @@ import java.io.PrintWriter;
 
 public class AuthServlet extends HttpServlet {
 
+    private final TokenService tokenService;
     private final UserService userService;
     private final ObjectMapper mapper;
 
-    public AuthServlet(UserService userService, ObjectMapper mapper){
+    public AuthServlet(TokenService tokenService, UserService userService, ObjectMapper mapper){
+        this.tokenService = tokenService;
         this.userService = userService;
         this.mapper = mapper;
     }
@@ -40,11 +43,16 @@ public class AuthServlet extends HttpServlet {
 
             // Stateful session management - will change to token based session management
             // server will remember who logged in and store a value
-            HttpSession httpSession = req.getSession();
-            httpSession.setAttribute("authUser", principal);
+//            HttpSession httpSession = req.getSession();
+//            httpSession.setAttribute("authUser", principal);
+
             resp.setContentType("application/json");
 
+            String token = tokenService.generateToken(principal);
+            resp.setHeader("Authorization", token);
+
             writer.write(payload);
+
         } catch (InvalidRequestException | DatabindException e){
             resp.setStatus(400); // BAD REQUEST (bad username/password)
         } catch(AuthenticationException e){

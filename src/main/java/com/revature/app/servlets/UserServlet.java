@@ -7,6 +7,7 @@ import com.revature.app.dtos.responses.Principal;
 import com.revature.app.dtos.responses.ResourceCreationResponse;
 import com.revature.app.dtos.responses.UserResponse;
 import com.revature.app.models.User;
+import com.revature.app.services.TokenService;
 import com.revature.app.services.UserService;
 import com.revature.app.util.exceptions.InvalidRequestException;
 import com.revature.app.util.exceptions.ResourceConflictException;
@@ -24,10 +25,12 @@ import java.util.List;
 // Mapping: /users/*
 public class UserServlet extends HttpServlet {
 
+    private final TokenService tokenService;
     private final UserService userService;
     private final ObjectMapper mapper;
 
-    public UserServlet(UserService userService, ObjectMapper mapper){
+    public UserServlet(TokenService tokenService, UserService userService, ObjectMapper mapper){
+        this.tokenService =tokenService;
         this.userService = userService;
         this.mapper=mapper;
     }
@@ -46,16 +49,24 @@ public class UserServlet extends HttpServlet {
 
         HttpSession session = req.getSession(false);
 
-        // if there is no session data, return 401 error
-        if (session == null){
-            resp.setStatus(401);
+//        // if there is no session data, return 401 error
+//        if (session == null){
+//            resp.setStatus(401);
+//            return;
+//        }
+//
+//        Principal requester = (Principal) session.getAttribute("authUser");
+
+        Principal requester = tokenService.extractRequesterDetails(req.getHeader("Authorization"));
+
+        if (requester==null){
+            resp.setStatus(401); // not logged in
             return;
         }
 
-        Principal requester = (Principal) session.getAttribute("authUser");
-
         if (!requester.getRole().equals("ADMIN")){
             resp.setStatus(403); // forbidden
+            return;
         }
 
         List<UserResponse> users = userService.getAllUsers();
