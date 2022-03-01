@@ -14,10 +14,10 @@ public class Reimbursement {
     private Blob receipt;
     private String paymentId;
 
-    private String authorId;
-    private String resolverId;
-    private String statusId;
-    private String typeId;
+    private User author;
+    private User resolver;
+    private ReimbursementStatus status;
+    private ReimbursementType type;
 
     public Reimbursement(){
 
@@ -25,20 +25,12 @@ public class Reimbursement {
 
     public Reimbursement(float amount, Timestamp submitted,
                          Timestamp resolved, String description,
-                         Blob receipt, String authorId, String paymentId,
-                         String resolverId, String statusId,
-                         String typeId) {
+                         Blob receipt) {
         this.amount = amount;
         this.submitted = submitted;
         this.resolved = resolved;
         this.description = description;
         this.receipt = receipt;
-        this.authorId = authorId;
-        // FK
-        this.paymentId = paymentId;
-        this.resolverId = resolverId;
-        this.statusId = statusId;
-        this.typeId = typeId;
     }
 
     public String getId() {
@@ -97,36 +89,36 @@ public class Reimbursement {
         this.paymentId = paymentId;
     }
 
-    public String getAuthorId() {
-        return authorId;
+    public User getAuthor() {
+        return author;
     }
 
-    public void setAuthorId(String authorId) {
-        this.authorId = authorId;
+    public void setAuthor(User author) {
+        this.author = author;
     }
 
-    public String getResolverId() {
-        return resolverId;
+    public User getResolver() {
+        return resolver;
     }
 
-    public void setResolverId(String resolverId) {
-        this.resolverId = resolverId;
+    public void setResolverId(User resolver) {
+        this.resolver = resolver;
     }
 
-    public String getStatusId() {
-        return statusId;
+    public ReimbursementStatus getStatus() {
+        return status;
     }
 
-    public void setStatusId(String statusId) {
-        this.statusId = statusId;
+    public void setStatus(ReimbursementStatus status) {
+        this.status = status;
     }
 
-    public String getTypeId() {
-        return typeId;
+    public ReimbursementType getType() {
+        return type;
     }
 
-    public void setTypeId(String typeId) {
-        this.typeId = typeId;
+    public void setType(ReimbursementType typeId) {
+        this.type = type;
     }
 
     @Override
@@ -134,12 +126,12 @@ public class Reimbursement {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Reimbursement that = (Reimbursement) o;
-        return Float.compare(that.amount, amount) == 0 && Objects.equals(id, that.id) && Objects.equals(submitted, that.submitted) && Objects.equals(resolved, that.resolved) && Objects.equals(description, that.description) && Objects.equals(receipt, that.receipt) && Objects.equals(paymentId, that.paymentId) && Objects.equals(authorId, that.authorId) && Objects.equals(resolverId, that.resolverId) && Objects.equals(statusId, that.statusId) && Objects.equals(typeId, that.typeId);
+        return Float.compare(that.amount, amount) == 0 && Objects.equals(id, that.id) && Objects.equals(submitted, that.submitted) && Objects.equals(resolved, that.resolved) && Objects.equals(description, that.description) && Objects.equals(receipt, that.receipt) && Objects.equals(paymentId, that.paymentId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, amount, submitted, resolved, description, receipt, paymentId, authorId, resolverId, statusId, typeId);
+        return Objects.hash(id, amount, submitted, resolved, description, receipt, paymentId);
     }
 
     @Override
@@ -152,10 +144,6 @@ public class Reimbursement {
                 ", description='" + description + '\'' +
                 ", receipt=" + receipt +
                 ", paymentId='" + paymentId + '\'' +
-                ", authorId='" + authorId + '\'' +
-                ", resolverId='" + resolverId + '\'' +
-                ", statusId='" + statusId + '\'' +
-                ", typeId='" + typeId + '\'' +
                 '}';
     }
 }
