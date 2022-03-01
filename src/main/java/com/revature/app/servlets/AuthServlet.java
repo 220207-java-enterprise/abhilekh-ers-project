@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.app.dtos.requests.LoginRequest;
 import com.revature.app.dtos.responses.Principal;
-import com.revature.app.models.User;
 import com.revature.app.services.UserService;
 import com.revature.app.util.exceptions.AuthenticationException;
 import com.revature.app.util.exceptions.InvalidRequestException;

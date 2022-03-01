@@ -111,7 +111,9 @@ public class UserDAO  implements CrudDAO<User>{
                 oneUser.setSurname(rs.getString("surname"));
                 oneUser.setIsActive(rs.getBoolean("is_active"));
                 oneUser.setRole(new UserRole(rs.getString("role_id"),rs.getString("role")));
+
                 allUsers.add(oneUser);
+                System.out.println(allUsers);
             }
         } catch (SQLException e) {
             throw new DataSourceException(e);
