@@ -3,6 +3,7 @@ package com.revature.app.servlets;
 import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.app.dtos.requests.NewReimbursementRequest;
+import com.revature.app.dtos.responses.Principal;
 import com.revature.app.dtos.responses.ResourceCreationResponse;
 import com.revature.app.models.Reimbursement;
 import com.revature.app.services.ReimbursementService;
@@ -32,7 +33,20 @@ public class ReimbursementServlet extends HttpServlet {
     // Get all reimbursements
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        super.doGet(req, resp);
+
+        Principal requester = tokenService.extractRequesterDetails(req.getHeader("Authorization"));
+
+        if (requester == null){
+            resp.setStatus(401);
+            return;
+        }
+
+        if (requester.getRole().equals("EMPLOYEE")){
+            resp.setStatus(403);
+        }
+
+        //List<ReimbursementResponse> reimbursements = reimbursementService.getAllReimbursements();
+
     }
 
     // Create a reimbursement
@@ -55,6 +69,7 @@ public class ReimbursementServlet extends HttpServlet {
         } catch (InvalidRequestException | DatabindException e){
             resp.setStatus(400);
         } catch (Exception e){
+            e.printStackTrace();
             resp.setStatus(500);
         }
     }

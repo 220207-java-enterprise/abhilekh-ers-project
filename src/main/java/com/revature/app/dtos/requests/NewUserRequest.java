@@ -12,7 +12,6 @@ public class NewUserRequest {
     private String password;
     private String givenName;
     private String surname;
-    //@JsonProperty("isActive") // will handle automated getter/setter
     private boolean isActive;
     private String roleId;
 

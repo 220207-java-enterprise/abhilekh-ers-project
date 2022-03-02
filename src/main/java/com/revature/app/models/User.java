@@ -11,6 +11,8 @@ public class User {
     private String givenName;
     private String surname;
     private boolean isActive;
+    private String roleId;
+
     private UserRole role;
 
     public User(){
@@ -27,8 +29,7 @@ public class User {
         this.givenName = givenName;
         this.surname = surname;
         this.isActive = isActive;
-        // FK
-        this.role = role;
+        this.roleId = roleId;
     }
 
     public String getId() {

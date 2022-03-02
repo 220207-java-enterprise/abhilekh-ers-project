@@ -7,12 +7,17 @@ import java.util.Objects;
 public class Reimbursement {
 
     private String id;
-    private float amount;
+    private Float amount;
     private Timestamp submitted;
     private Timestamp resolved;
     private String description;
-    private Blob receipt;
+    private String receipt;
     private String paymentId;
+
+    private String authorId;
+    private String resolverId;
+    private String statusId;
+    private String typeId;
 
     private User author;
     private User resolver;
@@ -20,17 +25,16 @@ public class Reimbursement {
     private ReimbursementType type;
 
     public Reimbursement(){
-
     }
 
-    public Reimbursement(float amount, Timestamp submitted,
-                         Timestamp resolved, String description,
-                         Blob receipt) {
+
+    public Reimbursement(Float amount, String description, String authorId, String typeId) {
+
         this.amount = amount;
-        this.submitted = submitted;
-        this.resolved = resolved;
         this.description = description;
-        this.receipt = receipt;
+        this.authorId = authorId;
+        this.typeId = typeId;
+
     }
 
     public String getId() {
@@ -41,11 +45,11 @@ public class Reimbursement {
         this.id = id;
     }
 
-    public float getAmount() {
+    public Float getAmount() {
         return amount;
     }
 
-    public void setAmount(float amount) {
+    public void setAmount(Float amount) {
         this.amount = amount;
     }
 
@@ -73,11 +77,11 @@ public class Reimbursement {
         this.description = description;
     }
 
-    public Blob getReceipt() {
+    public String getReceipt() {
         return receipt;
     }
 
-    public void setReceipt(Blob receipt) {
+    public void setReceipt(String receipt) {
         this.receipt = receipt;
     }
 
@@ -87,6 +91,38 @@ public class Reimbursement {
 
     public void setPaymentId(String paymentId) {
         this.paymentId = paymentId;
+    }
+
+    public String getAuthorId() {
+        return authorId;
+    }
+
+    public void setAuthorId(String authorId) {
+        this.authorId = authorId;
+    }
+
+    public String getResolverId() {
+        return resolverId;
+    }
+
+    public void setResolverId(String resolverId) {
+        this.resolverId = resolverId;
+    }
+
+    public String getStatusId() {
+        return statusId;
+    }
+
+    public void setStatusId(String statusId) {
+        this.statusId = statusId;
+    }
+
+    public String getTypeId() {
+        return typeId;
+    }
+
+    public void setTypeId(String typeId) {
+        this.typeId = typeId;
     }
 
     public User getAuthor() {
@@ -101,7 +137,7 @@ public class Reimbursement {
         return resolver;
     }
 
-    public void setResolverId(User resolver) {
+    public void setResolver(User resolver) {
         this.resolver = resolver;
     }
 
@@ -117,7 +153,7 @@ public class Reimbursement {
         return type;
     }
 
-    public void setType(ReimbursementType typeId) {
+    public void setType(ReimbursementType type) {
         this.type = type;
     }
 
@@ -144,6 +180,10 @@ public class Reimbursement {
                 ", description='" + description + '\'' +
                 ", receipt=" + receipt +
                 ", paymentId='" + paymentId + '\'' +
+                ", author=" + author +
+                ", resolver=" + resolver +
+                ", status=" + status +
+                ", type=" + type +
                 '}';
     }
 }

@@ -65,7 +65,7 @@ public class UserDAO  implements CrudDAO<User>{
 
         try (Connection conn = ConnectionFactory.getInstance().getConnection()){
 
-            PreparedStatement pstmt = conn.prepareStatement(rootSelect + "WHERE id=?");
+            PreparedStatement pstmt = conn.prepareStatement(rootSelect + "WHERE u.id=?");
 
             pstmt.setString(1, id);
 
@@ -113,7 +113,6 @@ public class UserDAO  implements CrudDAO<User>{
                 oneUser.setRole(new UserRole(rs.getString("role_id"),rs.getString("role")));
 
                 allUsers.add(oneUser);
-                System.out.println(allUsers);
             }
         } catch (SQLException e) {
             throw new DataSourceException(e);
@@ -222,7 +221,7 @@ public class UserDAO  implements CrudDAO<User>{
     // ***************************************
     //  GET USERS BY ROLE_ID
     // ***************************************
-    public ArrayList<User> getUsersByRole(String role_id) {
+    public ArrayList<User> getUsersByRole(String roleId) {
 
         ArrayList<User> roleUsers = new ArrayList<>();
 

@@ -45,17 +45,6 @@ public class UserServlet extends HttpServlet {
             return;
         }
 
-        // todo implement security logic here to protect sensitive operations
-
-        HttpSession session = req.getSession(false);
-
-//        // if there is no session data, return 401 error
-//        if (session == null){
-//            resp.setStatus(401);
-//            return;
-//        }
-//
-//        Principal requester = (Principal) session.getAttribute("authUser");
 
         Principal requester = tokenService.extractRequesterDetails(req.getHeader("Authorization"));
 
@@ -70,8 +59,6 @@ public class UserServlet extends HttpServlet {
         }
 
         List<UserResponse> users = userService.getAllUsers();
-        System.out.println("ALL USERS--> " + users.toString());
-
         String payload = mapper.writeValueAsString(users);
         resp.setContentType("application/json");
         resp.getWriter().write(payload);
@@ -91,14 +78,8 @@ public class UserServlet extends HttpServlet {
         PrintWriter respWriter = resp.getWriter();
 
         try{
-            // we should find JSON data in body
-            // we want to map it using ObjectMapper
-
-            // next line expects newUserRequest to have a no args constructor
             NewUserRequest newUserRequest = mapper.readValue(req.getInputStream(), NewUserRequest.class);
-            System.out.println("NEW USER REQUEST--------------> "+newUserRequest.toString());
             User newUser = userService.register(newUserRequest);
-            System.out.println("NEW USER--------------> "+newUser.toString());
             resp.setStatus(201); // CREATED
             resp.setContentType("application/json");
             String payload = mapper.writeValueAsString(new ResourceCreationResponse(newUser.getId()));

@@ -1,10 +1,16 @@
 package com.revature.app.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.revature.app.daos.ReimbursementDAO;
+import com.revature.app.daos.ReimbursementStatusDAO;
+import com.revature.app.daos.ReimbursementTypeDAO;
 import com.revature.app.daos.UserDAO;
+import com.revature.app.models.Reimbursement;
+import com.revature.app.services.ReimbursementService;
 import com.revature.app.services.TokenService;
 import com.revature.app.services.UserService;
 import com.revature.app.servlets.AuthServlet;
+import com.revature.app.servlets.ReimbursementServlet;
 import com.revature.app.servlets.UserServlet;
 
 import javax.servlet.ServletContext;
@@ -20,21 +26,33 @@ public class ContextLoaderListener implements ServletContextListener {
         // object mapper
         ObjectMapper mapper = new ObjectMapper();
 
+        // token classes
+        JwtConfig jwtConfig = new JwtConfig();
+        TokenService tokenService = new TokenService(jwtConfig);
+
         // wiring together dao, service, servlets
         UserDAO userDAO = new UserDAO();
         UserService userService = new UserService(userDAO);
 
-        JwtConfig jwtConfig = new JwtConfig();
-        TokenService tokenService = new TokenService(jwtConfig);
+        ReimbursementDAO reimbursementDAO = new ReimbursementDAO();
+        ReimbursementTypeDAO reimbursementTypeDAO = new ReimbursementTypeDAO();
+        ReimbursementStatusDAO reimbursementStatusDAO = new ReimbursementStatusDAO();
+
+        ReimbursementService reimbursementService = new ReimbursementService(
+                reimbursementDAO, reimbursementTypeDAO, reimbursementStatusDAO, userDAO);
+
 
         // servlets
         UserServlet userServlet = new UserServlet(tokenService, userService, mapper);
         AuthServlet authServlet = new AuthServlet(tokenService, userService, mapper);
+        ReimbursementServlet reimbursementServlet = new ReimbursementServlet(tokenService, reimbursementService,
+                mapper);
 
         // Programmatic Servlet Registration - connects UserServlet to ContextLoaderListener
         ServletContext context = sce.getServletContext();
         context.addServlet("UserServlet", userServlet).addMapping("/users/*");
         context.addServlet("AuthServlet", authServlet).addMapping("/auth");
+        context.addServlet("ReimbursementServlet", reimbursementServlet).addMapping("/reimbursements/*");
     }
 
     @Override
