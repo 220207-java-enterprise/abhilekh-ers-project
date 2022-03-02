@@ -11,8 +11,7 @@ public class ReimbursementType {
 
     }
 
-    public ReimbursementType(String type) {
-        this.type = type;
+    public ReimbursementType(String type_id, String type) {
     }
 
     public String getId() {

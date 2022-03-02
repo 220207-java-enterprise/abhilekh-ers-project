@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.app.dtos.requests.NewReimbursementRequest;
 import com.revature.app.dtos.responses.Principal;
+import com.revature.app.dtos.responses.ReimbursementResponse;
 import com.revature.app.dtos.responses.ResourceCreationResponse;
 import com.revature.app.models.Reimbursement;
 import com.revature.app.services.ReimbursementService;
@@ -17,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 
 public class ReimbursementServlet extends HttpServlet {
 
@@ -43,15 +45,37 @@ public class ReimbursementServlet extends HttpServlet {
 
         if (requester.getRole().equals("EMPLOYEE")){
             resp.setStatus(403);
+            return;
         }
 
-        //List<ReimbursementResponse> reimbursements = reimbursementService.getAllReimbursements();
+        List<ReimbursementResponse> reimbursements = reimbursementService.getAllReimbursements();
+        String payload = mapper.writeValueAsString(reimbursements);
+        resp.setContentType("application/json");
+        resp.getWriter().write(payload);
 
+        resp.setStatus(200);
     }
 
     // Create a reimbursement
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+        // todo principal object , jwt stuff
+        // vv
+
+         Principal requester = tokenService.extractRequesterDetails(req.getHeader("Authorization"));
+
+        if (requester == null){
+            resp.setStatus(401);
+            return;
+        }
+        System.out.println(requester);
+        System.out.println(requester.getRole().equals("EMPLOYEE"));
+        if (!requester.getRole().equals("EMPLOYEE")){
+            resp.setStatus(403);    // not allowed to post reimbursement
+            return;
+        }
+
 
         PrintWriter respWriter = resp.getWriter();
 
@@ -59,6 +83,8 @@ public class ReimbursementServlet extends HttpServlet {
             // map JSON request
             NewReimbursementRequest newReimbursementRequest = mapper.readValue(req.getInputStream(),
                     NewReimbursementRequest.class);
+
+            newReimbursementRequest.setAuthorId(requester.getId());
 
             Reimbursement newReimbursement = reimbursementService.addNewReimbursement(newReimbursementRequest);
 

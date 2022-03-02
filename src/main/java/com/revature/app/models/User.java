@@ -19,6 +19,10 @@ public class User {
         super();
     }
 
+    public User(String username, String givenName, String surname, String roleName){
+
+    }
+
     public User(String username, String email,
                 String password, String givenName, String surname,
                 boolean isActive, String roleId) {
@@ -30,6 +34,9 @@ public class User {
         this.surname = surname;
         this.isActive = isActive;
         this.roleId = roleId;
+    }
+
+    public User(String username, String role) {
     }
 
     public String getId() {

@@ -15,6 +15,9 @@ public class ReimbursementStatus {
         this.status = status;
     }
 
+    public ReimbursementStatus(String status) {
+    }
+
     public String getId() {
         return id;
     }

@@ -45,7 +45,6 @@ public class UserServlet extends HttpServlet {
             return;
         }
 
-
         Principal requester = tokenService.extractRequesterDetails(req.getHeader("Authorization"));
 
         if (requester==null){

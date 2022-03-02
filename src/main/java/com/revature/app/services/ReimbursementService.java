@@ -5,12 +5,15 @@ import com.revature.app.daos.ReimbursementStatusDAO;
 import com.revature.app.daos.ReimbursementTypeDAO;
 import com.revature.app.daos.UserDAO;
 import com.revature.app.dtos.requests.NewReimbursementRequest;
+import com.revature.app.dtos.responses.ReimbursementResponse;
 import com.revature.app.models.Reimbursement;
-import com.revature.app.models.ReimbursementStatus;
 import com.revature.app.models.ReimbursementType;
 import com.revature.app.models.User;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class ReimbursementService {
 
@@ -48,13 +51,26 @@ public class ReimbursementService {
                 ))));
 
         newReimbursemant.setStatusId("1");
-        User author = userDAO.getById(newReimbursementRequest.getAuthorId());
-        newReimbursemant.setAuthor(author);
 
         ReimbursementType type = reimbursementTypeDAO.getById(newReimbursementRequest.getTypeId());
+        // todo maybe type name would be easier
+
+        newReimbursemant.setType(type);
 
         reimbursementDAO.save(newReimbursemant);
 
         return newReimbursemant;
+    }
+
+    // ***********************************
+    //      GET ALL REIMBURSEMENTS
+    // ***********************************
+    public List<ReimbursementResponse> getAllReimbursements(){
+        List<Reimbursement> reimbursements = reimbursementDAO.getAll();
+        List<ReimbursementResponse> reimbursementResponses = new ArrayList<>();
+        for (Reimbursement reimbursement : reimbursements){
+            reimbursementResponses.add(new ReimbursementResponse(reimbursement));
+        }
+        return reimbursementResponses;
     }
 }

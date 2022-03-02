@@ -13,7 +13,7 @@ public class NewUserRequest {
     private String givenName;
     private String surname;
     private boolean isActive;
-    private String roleId;
+    private String roleId;  // todo take userRole name
 
     public  NewUserRequest(){
 

@@ -39,8 +39,8 @@ public class Principal {
         return role;
     }
 
-    public void setRole(String role_id) {
-        this.role = role_id;
+    public void setRole(String role) {
+        this.role = role;
     }
 
     @Override
@@ -48,7 +48,7 @@ public class Principal {
         return "Principal{" +
                 "id='" + id + '\'' +
                 ", username='" + username + '\'' +
-                ", role_id='" + role + '\'' +
+                ", role='" + role + '\'' +
                 '}';
     }
 }

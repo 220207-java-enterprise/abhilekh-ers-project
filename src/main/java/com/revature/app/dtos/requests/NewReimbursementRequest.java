@@ -6,8 +6,8 @@ public class NewReimbursementRequest {
 
     private float amount;
     private String description;
-    private String authorId;
-    private String typeId;
+    private String authorId;    // todo use jwt to extract id -> in servlet maybe
+    private String typeId;      // todo maybe type name?
 
     public NewReimbursementRequest(){
 

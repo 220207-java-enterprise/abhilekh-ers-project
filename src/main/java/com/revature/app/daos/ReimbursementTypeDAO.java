@@ -24,7 +24,7 @@ public class ReimbursementTypeDAO implements CrudDAO{
     @Override
     public ReimbursementType getById(String id) {
         ReimbursementType reimbursementType = null;
-        System.out.println(rootSelect + "WHERE id = ?");
+
         try (Connection conn = ConnectionFactory.getInstance().getConnection()) {
             PreparedStatement pstmt = conn.prepareStatement(rootSelect + "WHERE id = ?");
             pstmt.setString(1, id);

@@ -1,5 +1,10 @@
 package com.revature.app.dtos.responses;
 
+import com.revature.app.models.Reimbursement;
+import com.revature.app.models.ReimbursementStatus;
+import com.revature.app.models.ReimbursementType;
+import com.revature.app.models.User;
+
 import java.util.Date;
 
 public class ReimbursementResponse {
@@ -9,7 +14,7 @@ public class ReimbursementResponse {
     private String description;
     private Date submitted;
     private Date resolved;
-    private String payment_id;
+    private String paymentId;
     private String author;
     private String resolver;
     private String status;
@@ -17,18 +22,19 @@ public class ReimbursementResponse {
 
     public ReimbursementResponse(){};
 
-    public ReimbursementResponse(String id, float amount, String description, Date submitted, Date resolved, String payment_id, String author, String resolver, String status, String type) {
-        this.id = id;
-        this.amount = amount;
-        this.description = description;
-        this.submitted = submitted;
-        this.resolved = resolved;
-        this.payment_id = payment_id;
-        this.author = author;
-        this.resolver = resolver;
-        this.status = status;
-        this.type = type;
+    public ReimbursementResponse(Reimbursement reimbursement) {
+        this.id = reimbursement.getId();
+        this.amount = reimbursement.getAmount();
+        this.description = reimbursement.getDescription();
+        this.submitted = reimbursement.getSubmitted();
+        this.resolved = reimbursement.getResolved();
+        this.paymentId = reimbursement.getPaymentId();
+        this.author = reimbursement.getAuthor().getUsername();
+        this.resolver = reimbursement.getResolver().getUsername();
+        this.status = reimbursement.getStatus().getStatus();
+        this.type = reimbursement.getType().getType();
     }
+
 
     public String getId() {
         return id;
@@ -70,12 +76,12 @@ public class ReimbursementResponse {
         this.resolved = resolved;
     }
 
-    public String getPayment_id() {
-        return payment_id;
+    public String getPaymentId() {
+        return paymentId;
     }
 
-    public void setPayment_id(String payment_id) {
-        this.payment_id = payment_id;
+    public void setPaymentId(String paymentId) {
+        this.paymentId = paymentId;
     }
 
     public String getAuthor() {
