@@ -51,15 +51,17 @@ public class AuthServlet extends HttpServlet {
             String token = tokenService.generateToken(principal);
             resp.setHeader("Authorization", token);
 
+            writer.write("Login Success.\n");
             writer.write(payload);
 
         } catch (InvalidRequestException | DatabindException e){
+            writer.write("Send a valid request containing username and password.");
             resp.setStatus(400); // BAD REQUEST (bad username/password)
         } catch(AuthenticationException e){
+            writer.write("Invalid Username/Password");
             resp.setStatus(401); // credentials unknown
         } catch (Exception e){
             resp.setStatus(500);
-            e.printStackTrace();
         }
     }
 }

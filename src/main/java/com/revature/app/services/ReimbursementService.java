@@ -10,6 +10,7 @@ import com.revature.app.dtos.requests.UpdateReimbursementRequest;
 import com.revature.app.dtos.responses.Principal;
 import com.revature.app.dtos.responses.ReimbursementResponse;
 import com.revature.app.models.*;
+import com.revature.app.util.exceptions.InvalidRequestException;
 
 import java.util.List;
 import java.util.UUID;
@@ -44,6 +45,10 @@ public class ReimbursementService {
 
         // add/change some properties before saving to database
         newReimbursement.setId(UUID.randomUUID().toString());
+
+        if (newReimbursement.getAmount() < 0){
+            throw new InvalidRequestException();
+        }
 
         newReimbursement.setAmount(
                 Float.parseFloat(String.format(
@@ -97,6 +102,7 @@ public class ReimbursementService {
                     "DENIED"));
         }
 
+        System.out.println("SENDING THIS ---> "+updatedReimbursement);
 
         reimbursementDAO.update(updatedReimbursement);
 

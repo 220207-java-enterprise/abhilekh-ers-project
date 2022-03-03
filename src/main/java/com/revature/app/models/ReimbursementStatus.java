@@ -7,7 +7,6 @@ public class ReimbursementStatus {
     private String status;
 
     public ReimbursementStatus(){
-
     }
 
     public ReimbursementStatus(String id, String status){

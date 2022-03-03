@@ -104,7 +104,7 @@ public class ReimbursementServlet extends HttpServlet {
         System.out.println(requester);
         System.out.println(requester.getRole().equals("EMPLOYEE"));
         if (!requester.getRole().equals("EMPLOYEE")){
-            resp.getWriter().write("Please login as an Employee to make a Reimbursement request for approval.");
+            resp.getWriter().write("Please login as an Employee to make a Reimbursement request.");
             resp.setStatus(403);
             return;
         }
@@ -113,23 +113,21 @@ public class ReimbursementServlet extends HttpServlet {
         PrintWriter respWriter = resp.getWriter();
 
         try {
-
             NewReimbursementRequest newReimbursementRequest = mapper.readValue(req.getInputStream(),
                     NewReimbursementRequest.class);
 
             newReimbursementRequest.setAuthorId(requester.getId());
-
             Reimbursement newReimbursement = reimbursementService.addNewReimbursement(newReimbursementRequest);
-
-            resp.setStatus(201);
+            resp.getWriter().write("Successfully added a Reimbursement.");
             resp.setContentType("application/json");
             String payload = mapper.writeValueAsString(new ResourceCreationResponse(newReimbursement.getId()));
             respWriter.write(payload);
+            resp.setStatus(201);
         } catch (InvalidRequestException | DatabindException e){
             resp.getWriter().write("Please submit a valid Reimbursement request");
             resp.setStatus(400);
         } catch (Exception e){
-            e.printStackTrace();
+            resp.getWriter().write("Something went wrong.");
             resp.setStatus(500);
         }
     }
@@ -162,7 +160,7 @@ public class ReimbursementServlet extends HttpServlet {
 
 
                 if (!reimbursementService.isAuthorizedToEdit(extractedReimbursement, requester)){
-                        resp.getWriter().write("You are not authorized to update this reimbursement.");
+                        resp.getWriter().write("You are not authorized to view/update this reimbursement.");
                         resp.setStatus(403);
                         return;
                 }

@@ -46,11 +46,13 @@ public class UserServlet extends HttpServlet {
         Principal requester = tokenService.extractRequesterDetails(req.getHeader("Authorization"));
 
         if (requester==null){
+            resp.getWriter().write("You need to be logged in.");
             resp.setStatus(401); // not logged in
             return;
         }
 
         if (!requester.getRole().equals("ADMIN")){
+            resp.getWriter().write("Please login as an admin to complete this action.");
             resp.setStatus(403); // forbidden
             return;
         }
@@ -91,19 +93,23 @@ public class UserServlet extends HttpServlet {
 
     }
 
-    protected void checkAvailability(HttpServletRequest req, HttpServletResponse resp){
+    protected void checkAvailability(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String usernameValue = req.getParameter("username");
         String emailValue = req.getParameter("email");
         if(usernameValue != null){
             if(userService.isUsernameAvailable(usernameValue)){
-                resp.setStatus(204); // No content in body
+                resp.getWriter().write("This Username is available.");
+                resp.setStatus(200); // No content in body
             } else{
+                resp.getWriter().write("This Username is already taken.");
                 resp.setStatus(409); // Conflict
             }
         } else if (emailValue != null){
             if(userService.isEmailAvailable(emailValue)){
-                resp.setStatus(204); // No content in body
+                resp.getWriter().write("This Email is available.");
+                resp.setStatus(200); // No content in body
             } else{
+                resp.getWriter().write("This Email is already in our system, try logging in.");
                 resp.setStatus(409); // Conflict
             }
         }
@@ -114,24 +120,31 @@ public class UserServlet extends HttpServlet {
         Principal requester = tokenService.extractRequesterDetails(req.getHeader("Authorization"));
 
         if (requester==null){
+            resp.getWriter().write("You need to be logged in.");
             resp.setStatus(401); // login before making an update
             return;
         }
 
         if (!requester.getRole().equals("ADMIN")){
+            resp.getWriter().write("Please login as Finance Manager to complete this action.");
             resp.setStatus(403); // forbidden
             return;
         }
 
+        try{
         UpdateUserRequest updateUserRequest = mapper.readValue(req.getInputStream(), UpdateUserRequest.class);
 
         User user = userService.updateUser(updateUserRequest);
 
         String payload = mapper.writeValueAsString(new GetUserResponse(user));
         resp.setContentType("application/json");
+        resp.getWriter().write("User updated.\n");
         resp.getWriter().write(payload);
 
-        // redeploying will destroy session and it's attributes
         resp.setStatus(200);
+        } catch (Exception e){
+            resp.getWriter().write("User not found in our system.");
+            resp.setStatus(404);
+        }
     }
 }
