@@ -84,7 +84,8 @@ public class UserService {
         String potentialUserHashedPass = potentialUser.getPassword();
         String loginRequestHashedPass = BCrypt.hashpw(loginRequest.getPassword(), BCrypt.gensalt());
 
-        System.out.println(BCrypt.checkpw(loginRequest.getPassword(), potentialUserHashedPass));
+//        System.out.println(BCrypt.checkpw(loginRequest.getPassword(), potentialUserHashedPass));
+
 
         if(!BCrypt.checkpw(loginRequest.getPassword(), potentialUserHashedPass)) {
             System.out.println("PASSWORD DID NOT MATCH");
@@ -149,7 +150,11 @@ public class UserService {
             updatedUser.setSurname(updateUserRequest.getSurname());
         }
         if (updateUserRequest.getPassword()!=null){
-            updatedUser.setPassword(updateUserRequest.getPassword());
+            System.out.println("before hashing... " + updateUserRequest.getPassword());
+            // hash before setting to updatedUser
+            String hashed = BCrypt.hashpw(updateUserRequest.getPassword(), BCrypt.gensalt());
+            System.out.println("after hashing... "+ hashed);
+            updatedUser.setPassword(hashed);
         }
         if (updateUserRequest.getRoleName()!=null){
             if (updateUserRequest.getRoleName().equals("ADMIN")) updatedUser.setRole(new UserRole("1","ADMIN"));
@@ -164,6 +169,9 @@ public class UserService {
         } else if (updateUserRequest.getIsActive() == false){
             updatedUser.setIsActive(false);
         }
+
+        // hash password before updating
+        updatedUser.getPassword();
 
         userDAO.update(updatedUser);
 

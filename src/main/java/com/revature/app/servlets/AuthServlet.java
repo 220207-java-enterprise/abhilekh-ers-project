@@ -63,6 +63,7 @@ public class AuthServlet extends HttpServlet {
             resp.setStatus(401); // credentials unknown
             return;
         } catch (Exception e){
+            e.printStackTrace();
             resp.setStatus(500);
 
         }

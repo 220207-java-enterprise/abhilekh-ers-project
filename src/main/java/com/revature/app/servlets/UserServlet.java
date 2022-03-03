@@ -10,6 +10,7 @@ import com.revature.app.services.TokenService;
 import com.revature.app.services.UserService;
 import com.revature.app.util.exceptions.InvalidRequestException;
 import com.revature.app.util.exceptions.ResourceConflictException;
+import org.mindrot.jbcrypt.BCrypt;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -39,6 +40,7 @@ public class UserServlet extends HttpServlet {
 
         String[] reqFrags = req.getRequestURI().split("/");
         if(reqFrags.length==4 && reqFrags[3].equals("availability")){
+            System.out.println(BCrypt.hashpw(("p4$$word"),BCrypt.gensalt()));
             checkAvailability(req, resp);
             return;
         }
