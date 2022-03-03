@@ -10,6 +10,7 @@ import com.revature.app.models.UserRole;
 import com.revature.app.util.exceptions.AuthenticationException;
 import com.revature.app.util.exceptions.InvalidRequestException;
 import com.revature.app.util.exceptions.ResourceConflictException;
+import org.mindrot.jbcrypt.BCrypt;
 
 import java.util.List;
 import java.util.UUID;
@@ -50,11 +51,16 @@ public class UserService {
             throw new ResourceConflictException(msg);
         }
 
-        // TODO encrypt provided password before storing in the database
-
         newUser.setId(UUID.randomUUID().toString());
         newUser.setRole(new UserRole("3","EMPLOYEE"));
         newUser.setIsActive(false);
+
+        // HASH PASSWORD
+        String hashed = BCrypt.hashpw(newUser.getPassword(), BCrypt.gensalt());
+        System.out.println(hashed);
+        newUser.setPassword(hashed);
+        System.out.println(newUser);
+
         userDAO.save(newUser);
 
         return newUser;
@@ -73,9 +79,20 @@ public class UserService {
             throw new InvalidRequestException("Invalid credentials provided");
         }
 
-        // TODO encrypt provided password
+        User potentialUser = userDAO.findUserByUsername(username);
 
-        User authUser = userDAO.findUserByUsernameAndPassword(username, password);
+        String potentialUserHashedPass = potentialUser.getPassword();
+        String loginRequestHashedPass = BCrypt.hashpw(loginRequest.getPassword(), BCrypt.gensalt());
+
+        System.out.println(BCrypt.checkpw(loginRequest.getPassword(), potentialUserHashedPass));
+
+        if(!BCrypt.checkpw(loginRequest.getPassword(), potentialUserHashedPass)) {
+            System.out.println("PASSWORD DID NOT MATCH");
+            throw new AuthenticationException();
+        }
+
+        User authUser = userDAO.findUserByUsername(username);
+        System.out.println(authUser);
 
         if (authUser == null){
             throw new AuthenticationException();

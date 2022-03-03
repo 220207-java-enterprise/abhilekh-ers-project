@@ -17,7 +17,9 @@ public class Reimbursement {
     private String authorId;
     private String resolverId;
     private String statusId;
+
     private String typeId;
+    private String typeName;
 
     private User author;
     private User resolver;
@@ -29,26 +31,17 @@ public class Reimbursement {
 
 
     public Reimbursement(Float amount, String description, String authorId, String typeId) {
-
         this.amount = amount;
         this.description = description;
         this.authorId = authorId;
         this.typeId = typeId;
-//        if (typeName == "LODGING") {
-//            this.typeId = "1";
-//        } else if (typeName == "TRAVEL") {
-//            this.typeId = "2";
-//        } else if (typeName == "TRAVEL") {
-//            this.typeId = "2";
-//        } else if (typeName == "TRAVEL") {
-//            this.typeId = "2";
-//        }
     }
 
-    public Reimbursement(String id, Float amount, String description) {
+    public Reimbursement(String id, Float amount, String description, String typeName) {
         this.id = id;
         this.amount = amount;
         this.description = description;
+        this.typeName = typeName;
     }
 
     public String getId() {
@@ -171,17 +164,26 @@ public class Reimbursement {
         this.type = type;
     }
 
+
+    public String getTypeName() {
+        return typeName;
+    }
+
+    public void setTypeName(String typeName) {
+        this.typeName = typeName;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Reimbursement that = (Reimbursement) o;
-        return Float.compare(that.amount, amount) == 0 && Objects.equals(id, that.id) && Objects.equals(submitted, that.submitted) && Objects.equals(resolved, that.resolved) && Objects.equals(description, that.description) && Objects.equals(receipt, that.receipt) && Objects.equals(paymentId, that.paymentId);
+        return Objects.equals(id, that.id) && Objects.equals(amount, that.amount) && Objects.equals(submitted, that.submitted) && Objects.equals(resolved, that.resolved) && Objects.equals(description, that.description) && Objects.equals(receipt, that.receipt) && Objects.equals(paymentId, that.paymentId) && Objects.equals(authorId, that.authorId) && Objects.equals(resolverId, that.resolverId) && Objects.equals(statusId, that.statusId) && Objects.equals(typeId, that.typeId) && Objects.equals(typeName, that.typeName) && Objects.equals(author, that.author) && Objects.equals(resolver, that.resolver) && Objects.equals(status, that.status) && Objects.equals(type, that.type);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, amount, submitted, resolved, description, receipt, paymentId);
+        return Objects.hash(id, amount, submitted, resolved, description, receipt, paymentId, authorId, resolverId, statusId, typeId, typeName, author, resolver, status, type);
     }
 
     @Override
@@ -192,8 +194,13 @@ public class Reimbursement {
                 ", submitted=" + submitted +
                 ", resolved=" + resolved +
                 ", description='" + description + '\'' +
-                ", receipt=" + receipt +
+                ", receipt='" + receipt + '\'' +
                 ", paymentId='" + paymentId + '\'' +
+                ", authorId='" + authorId + '\'' +
+                ", resolverId='" + resolverId + '\'' +
+                ", statusId='" + statusId + '\'' +
+                ", typeId='" + typeId + '\'' +
+                ", typeName='" + typeName + '\'' +
                 ", author=" + author +
                 ", resolver=" + resolver +
                 ", status=" + status +

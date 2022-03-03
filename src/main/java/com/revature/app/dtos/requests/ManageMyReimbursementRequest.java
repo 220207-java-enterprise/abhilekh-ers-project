@@ -7,18 +7,19 @@ public class ManageMyReimbursementRequest {
     private String id;
     private Float amount;
     private String description;
-
+    private String typeName;
 
     public ManageMyReimbursementRequest(){}
 
-    public ManageMyReimbursementRequest(String id, Float amount, String description){
+    public ManageMyReimbursementRequest(String id, Float amount, String description, String typeName){
         this.id = id;
         this.amount = amount.floatValue();
         this.description = description;
+        this.typeName = typeName;
     }
 
     public Reimbursement extractReimbursement(){
-        return new Reimbursement(id, amount, description);
+        return new Reimbursement(id, amount, description, typeName);
     }
 
     public String getId() {
@@ -45,4 +46,11 @@ public class ManageMyReimbursementRequest {
         this.description = description;
     }
 
+    public String getTypeName() {
+        return typeName;
+    }
+
+    public void setTypeName(String typeName) {
+        this.typeName = typeName;
+    }
 }

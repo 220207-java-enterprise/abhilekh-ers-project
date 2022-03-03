@@ -319,15 +319,18 @@ public class ReimbursementDAO implements CrudDAO<Reimbursement> {
         try (Connection conn = ConnectionFactory.getInstance().getConnection()){
 
             PreparedStatement pstmt = conn.prepareStatement(
-                    "UPDATE reimbursements SET submitted=?, amount=?, description=?, status_id='1' WHERE" +
+                    "UPDATE reimbursements SET submitted=?, amount=?, description=?, type_id= ?, status_id='1' WHERE" +
                             " id=?"
             );
 
             pstmt.setTimestamp(1, new Timestamp(System.currentTimeMillis()));
             pstmt.setFloat(2, updatedReimbursement.getAmount());
             pstmt.setString(3, updatedReimbursement.getDescription());
-            pstmt.setString(4, updatedReimbursement.getId());
+            pstmt.setString(4, updatedReimbursement.getType().getId());
+            pstmt.setString(5, updatedReimbursement.getId());
 
+            System.out.println(pstmt);
+            System.out.println("-------------------");
             System.out.println(updatedReimbursement);
             int rowsInserted = pstmt.executeUpdate();
             if (rowsInserted != 1){

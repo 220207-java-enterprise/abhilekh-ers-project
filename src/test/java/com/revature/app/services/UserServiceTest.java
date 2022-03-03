@@ -137,25 +137,25 @@ public class UserServiceTest {
         }
     }
 
-    @Test
-    public void test_login_returnsAuthenticatedAppUser_givenValidAndKnownCredentials(){
-
-        // Arrange
-        UserService spiedSut = Mockito.spy(sut);
-
-        String validUsername = "4bhilekh";
-        String validPassword = "p4$$word";
-
-        LoginRequest loginRequest = new LoginRequest(validUsername, validPassword);
-        when(spiedSut.isUsernameValid(validUsername)).thenReturn(true);
-
-        // Act
-        when(mockUserDao.findUserByUsernameAndPassword(validUsername, validPassword)).thenReturn(new User());
-        User authUserRequest = spiedSut.login(loginRequest);
-
-        //Assert
-        assertNotNull(authUserRequest);
-    }
+//    @Test
+//    public void test_login_returnsAuthenticatedAppUser_givenValidAndKnownCredentials(){
+//
+//        // Arrange
+//        UserService spiedSut = Mockito.spy(sut);
+//
+//        String validUsername = "4bhilekh";
+//        String validPassword = "p4$$word";
+//
+//        LoginRequest loginRequest = new LoginRequest(validUsername, validPassword);
+//        when(spiedSut.isUsernameValid(validUsername)).thenReturn(true);
+//
+//        // Act
+//        when(mockUserDao.findUserByUsernameAndPassword(validUsername, validPassword)).thenReturn(new User());
+//        User authUserRequest = spiedSut.login(loginRequest);
+//
+//        //Assert
+//        assertNotNull(authUserRequest);
+//    }
 
     @Test
     public void test_isValidUser_givenInvalidUserUsername(){

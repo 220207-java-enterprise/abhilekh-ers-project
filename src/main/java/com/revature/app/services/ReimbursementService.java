@@ -109,9 +109,9 @@ public class ReimbursementService {
         return updatedReimbursement;
     }
 
-    // *********************************
-    //      UPDATE A REIMBURSEMENT
-    // *********************************
+    // *******************************************
+    //      MANAGE MY REIMBURSEMENT FOR EMPLOYEES
+    // *******************************************
     public Reimbursement manageMyReimbursement(ManageMyReimbursementRequest manageMyReimbursementRequest){
 
         Reimbursement updatedReimbursement = manageMyReimbursementRequest.extractReimbursement();
@@ -119,6 +119,16 @@ public class ReimbursementService {
         if (manageMyReimbursementRequest.getAmount()==null && updatedReimbursement.getDescription()==null){
             Reimbursement viewReimbursement = reimbursementDAO.getById(manageMyReimbursementRequest.getId());
             return viewReimbursement;
+        }
+
+        if (updatedReimbursement.getTypeName().equals("LODGING")) {
+            updatedReimbursement.setType(new ReimbursementType("1","LODGING"));
+        } else if (updatedReimbursement.getTypeName().equals("TRAVEL")) {
+            updatedReimbursement.setType(new ReimbursementType("2","TRAVEL"));
+        } else if (updatedReimbursement.getTypeName().equals("FOOD")) {
+            updatedReimbursement.setType(new ReimbursementType("3","FOOD"));
+        } else if (updatedReimbursement.getTypeName().equals("OTHER")) {
+            updatedReimbursement.setType(new ReimbursementType("4","OTHER"));
         }
 
         updatedReimbursement.setAmount(

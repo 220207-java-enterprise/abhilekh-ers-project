@@ -13,6 +13,7 @@ public class UpdateReimbursementResponse {
     private String description;
     private String resolverName;
     private String statusName;
+    private String typeName;
 
     private UpdateReimbursementResponse(){}
 
@@ -23,6 +24,7 @@ public class UpdateReimbursementResponse {
         this.description = reimbursement.getDescription();
         this.resolverName = reimbursement.getResolver().getUsername();
         this.statusName = reimbursement.getStatus().getStatus();
+        this.typeName = reimbursement.getType().getType();
     }
 
     public String getId() {
@@ -71,5 +73,13 @@ public class UpdateReimbursementResponse {
 
     public void setStatusName(String statusName) {
         this.statusName = statusName;
+    }
+
+    public String getTypeName() {
+        return typeName;
+    }
+
+    public void setTypeName(String typeName) {
+        this.typeName = typeName;
     }
 }

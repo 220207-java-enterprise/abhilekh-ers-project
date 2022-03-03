@@ -77,7 +77,7 @@ public class UserServlet extends HttpServlet {
             resp.setStatus(201); // CREATED
             resp.setContentType("application/json");
             String payload = mapper.writeValueAsString(new ResourceCreationResponse(newUser.getId()));
-            System.out.println("PAYLOAD--------------> " + payload);
+
             respWriter.write(payload);
 
         } catch (InvalidRequestException | DatabindException e) {

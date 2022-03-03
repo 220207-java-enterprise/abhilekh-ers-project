@@ -12,6 +12,7 @@ public class ManageMyReimbursementResponse {
     private String description;
     private Timestamp submitted;
     private String statusName;
+    private String typeName;
 
     public ManageMyReimbursementResponse(){}
 
@@ -19,8 +20,9 @@ public class ManageMyReimbursementResponse {
         this.id = reimbursement.getId();
         this.amount = reimbursement.getAmount();
         this.description = reimbursement.getDescription();
-        this.submitted = reimbursement.getSubmitted();
+        //this.submitted = reimbursement.getSubmitted();
         this.statusName = reimbursement.getStatus().getStatus();
+        this.typeName = reimbursement.getType().getType();
     }
 
     public String getId() {
@@ -61,5 +63,13 @@ public class ManageMyReimbursementResponse {
 
     public void setStatusName(String statusName) {
         this.statusName = statusName;
+    }
+
+    public String getTypeName() {
+        return typeName;
+    }
+
+    public void setTypeName(String typeName) {
+        this.typeName = typeName;
     }
 }

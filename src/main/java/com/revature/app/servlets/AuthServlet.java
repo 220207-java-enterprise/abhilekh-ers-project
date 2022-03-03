@@ -57,11 +57,14 @@ public class AuthServlet extends HttpServlet {
         } catch (InvalidRequestException | DatabindException e){
             writer.write("Send a valid request containing username and password.");
             resp.setStatus(400); // BAD REQUEST (bad username/password)
+            return;
         } catch(AuthenticationException e){
             writer.write("Invalid Username/Password");
             resp.setStatus(401); // credentials unknown
+            return;
         } catch (Exception e){
             resp.setStatus(500);
+
         }
     }
 }
