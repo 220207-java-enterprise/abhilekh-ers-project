@@ -3,9 +3,8 @@ package com.revature.app.servlets;
 import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.app.dtos.requests.NewUserRequest;
-import com.revature.app.dtos.responses.Principal;
-import com.revature.app.dtos.responses.ResourceCreationResponse;
-import com.revature.app.dtos.responses.UserResponse;
+import com.revature.app.dtos.requests.UpdateUserRequest;
+import com.revature.app.dtos.responses.*;
 import com.revature.app.models.User;
 import com.revature.app.services.TokenService;
 import com.revature.app.services.UserService;
@@ -16,7 +15,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
@@ -57,7 +55,7 @@ public class UserServlet extends HttpServlet {
             return;
         }
 
-        List<UserResponse> users = userService.getAllUsers();
+        List<GetUserResponse> users = userService.getAllUsers();
         String payload = mapper.writeValueAsString(users);
         resp.setContentType("application/json");
         resp.getWriter().write(payload);
@@ -66,11 +64,6 @@ public class UserServlet extends HttpServlet {
         resp.setStatus(200);
     }
 
-    // Update a User
-//    @Override
-//    protected void doUpdat
-
-    // Register a User endpoint
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
@@ -114,5 +107,31 @@ public class UserServlet extends HttpServlet {
                 resp.setStatus(409); // Conflict
             }
         }
+    }
+
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+
+        Principal requester = tokenService.extractRequesterDetails(req.getHeader("Authorization"));
+
+        if (requester==null){
+            resp.setStatus(401); // login before making an update
+            return;
+        }
+
+        if (!requester.getRole().equals("ADMIN")){
+            resp.setStatus(403); // forbidden
+            return;
+        }
+
+        UpdateUserRequest updateUserRequest = mapper.readValue(req.getInputStream(), UpdateUserRequest.class);
+
+        User user = userService.updateUser(updateUserRequest);
+
+        String payload = mapper.writeValueAsString(new GetUserResponse(user));
+        resp.setContentType("application/json");
+        resp.getWriter().write(payload);
+
+        // redeploying will destroy session and it's attributes
+        resp.setStatus(200);
     }
 }

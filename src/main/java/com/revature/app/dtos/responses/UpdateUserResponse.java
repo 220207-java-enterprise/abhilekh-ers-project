@@ -3,7 +3,7 @@ package com.revature.app.dtos.responses;
 import com.revature.app.models.User;
 
 // will obfuscate email and password for privacy reason
-public class UserResponse {
+public class UpdateUserResponse {
 
     private String id;
     private String givenName;
@@ -11,11 +11,11 @@ public class UserResponse {
     private String username;
     private String role;
 
-    public UserResponse(){
+    public UpdateUserResponse(){
         super();
     }
 
-    public UserResponse(User user){
+    public UpdateUserResponse(User user){
         this.id = user.getId();
         this.givenName = user.getGivenName();
         this.surname = user.getSurname();
@@ -62,4 +62,16 @@ public class UserResponse {
     public void setRole(String role) {
         this.role = role;
     }
+
+    @Override
+    public String toString() {
+        return "UserResponse{" +
+                "id='" + id + '\'' +
+                ", givenName='" + givenName + '\'' +
+                ", surname='" + surname + '\'' +
+                ", username='" + username + '\'' +
+                ", role='" + role + '\'' +
+                '}';
+    }
 }
+

@@ -3,14 +3,14 @@ package com.revature.app.services;
 import com.revature.app.daos.UserDAO;
 import com.revature.app.dtos.requests.LoginRequest;
 import com.revature.app.dtos.requests.NewUserRequest;
-import com.revature.app.dtos.responses.UserResponse;
+import com.revature.app.dtos.requests.UpdateUserRequest;
+import com.revature.app.dtos.responses.GetUserResponse;
 import com.revature.app.models.User;
 import com.revature.app.models.UserRole;
 import com.revature.app.util.exceptions.AuthenticationException;
 import com.revature.app.util.exceptions.InvalidRequestException;
 import com.revature.app.util.exceptions.ResourceConflictException;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -54,7 +54,7 @@ public class UserService {
 
         newUser.setId(UUID.randomUUID().toString());
         newUser.setRole(new UserRole("1","EMPLOYEE"));
-        // todo get userRole by name
+        newUser.setIsActive(false);
         userDAO.save(newUser);
 
         return newUser;
@@ -88,14 +88,14 @@ public class UserService {
     // ***********************************
     //      GET ALL USERS
     // ***********************************
-    public List<UserResponse> getAllUsers(){
+    public List<GetUserResponse> getAllUsers(){
 
         // **********************
         // MAPPING USING STREAMS        //todo order allUsers using comparable/comparators
         //***********************
         return userDAO.getAll()
                 .stream()
-                .map(UserResponse::new)
+                .map(GetUserResponse::new)
                 .collect(Collectors.toList());
 
         // *******************
@@ -110,6 +110,47 @@ public class UserService {
         }
         return userResponses;
         */
+    }
+
+    // ***********************************
+    //      UPDATE A USER
+    // ***********************************
+    public User updateUser(UpdateUserRequest updateUserRequest){
+
+        User updatedUser = userDAO.getById(updateUserRequest.getId());
+
+        if (updateUserRequest.getUsername()!=null){
+            updatedUser.setUsername(updateUserRequest.getUsername());
+        }
+        if (updateUserRequest.getEmail()!=null){
+            updatedUser.setEmail(updateUserRequest.getEmail());
+        }
+        if (updateUserRequest.getGivenName()!=null){
+            updatedUser.setGivenName(updateUserRequest.getGivenName());
+        }
+        if (updateUserRequest.getSurname()!=null){
+            updatedUser.setSurname(updateUserRequest.getSurname());
+        }
+        if (updateUserRequest.getPassword()!=null){
+            updatedUser.setPassword(updateUserRequest.getPassword());
+        }
+        if (updateUserRequest.getRoleName()!=null){
+            if (updateUserRequest.getRoleName().equals("ADMIN")) updatedUser.setRole(new UserRole("1","ADMIN"));
+            else if (updateUserRequest.getRoleName().equals("FINANCE_MANAGER")) updatedUser.setRole(new UserRole("2",
+             "FINANCE_MANAGER"));
+            else if (updateUserRequest.getRoleName().equals("EMPLOYEE")) updatedUser.setRole(new UserRole("3",
+                    "EMPLOYEE"));
+        }
+
+        if (updateUserRequest.getIsActive() == true){
+            updatedUser.setIsActive(true);
+        } else if (updateUserRequest.getIsActive() == false){
+            updatedUser.setIsActive(false);
+        }
+
+        userDAO.update(updatedUser);
+
+        return updatedUser;
     }
 
     // ====================================

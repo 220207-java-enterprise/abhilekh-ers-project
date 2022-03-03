@@ -60,10 +60,7 @@ public class ReimbursementServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        // todo principal object , jwt stuff
-        // vv
-
-         Principal requester = tokenService.extractRequesterDetails(req.getHeader("Authorization"));
+        Principal requester = tokenService.extractRequesterDetails(req.getHeader("Authorization"));
 
         if (requester == null){
             resp.setStatus(401);
@@ -97,6 +94,21 @@ public class ReimbursementServlet extends HttpServlet {
         } catch (Exception e){
             e.printStackTrace();
             resp.setStatus(500);
+        }
+    }
+
+    @Override
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp){
+        Principal requester = tokenService.extractRequesterDetails(req.getHeader("Authorization"));
+
+        if (requester == null){
+            resp.setStatus(401);
+            return;
+        }
+
+        if (!requester.getRole().equals("FINANCE_MANAGER")){
+            resp.setStatus(403);    // not allowed to update reimbursement
+            return;
         }
     }
 }

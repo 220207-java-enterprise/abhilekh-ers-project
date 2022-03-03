@@ -1,5 +1,6 @@
 package com.revature.app.daos;
 
+import com.revature.app.dtos.requests.UpdateUserRequest;
 import com.revature.app.models.User;
 import com.revature.app.models.UserRole;
 import com.revature.app.util.ConnectionFactory;
@@ -131,17 +132,17 @@ public class UserDAO  implements CrudDAO<User>{
         try (Connection conn = ConnectionFactory.getInstance().getConnection()){
 
             PreparedStatement pstmt = conn.prepareStatement(
-                    "UPDATE users SET username=?, email=?, password=?, given_name=?, surname=?, is_active=?, " +
-                            "role_id=? WHERE id=?"
+                    "UPDATE users SET username=?, email=?, given_name=?, surname=?, password=?, role_id=?, " +
+                            "is_active=? WHERE id=?"
             );
 
             pstmt.setString(1, updatedUser.getUsername());
             pstmt.setString(2, updatedUser.getEmail());
-            pstmt.setString(3, updatedUser.getPassword());
-            pstmt.setString(4, updatedUser.getGivenName());
-            pstmt.setString(5, updatedUser.getSurname());
-            pstmt.setBoolean(6, updatedUser.getIsActive());
-            pstmt.setString(7, updatedUser.getRole().getId());
+            pstmt.setString(3, updatedUser.getGivenName());
+            pstmt.setString(4, updatedUser.getSurname());
+            pstmt.setString(5, updatedUser.getPassword());
+            pstmt.setString(6, updatedUser.getRole().getId());
+            pstmt.setBoolean(7, updatedUser.getIsActive());
             pstmt.setString(8, updatedUser.getId());
 
             int rowsInserted = pstmt.executeUpdate();
