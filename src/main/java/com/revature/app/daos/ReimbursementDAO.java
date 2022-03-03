@@ -46,7 +46,7 @@ public class ReimbursementDAO implements CrudDAO<Reimbursement> {
             pstmt.setString(8, newReimbursement.getAuthorId());
             pstmt.setString(9, newReimbursement.getResolverId());
             pstmt.setString(10, newReimbursement.getStatusId());
-            pstmt.setString(11, newReimbursement.getTypeId());
+            pstmt.setString(11, newReimbursement.getType().getId());
 
             int rowsInserted = pstmt.executeUpdate();
 
@@ -95,6 +95,7 @@ public class ReimbursementDAO implements CrudDAO<Reimbursement> {
 
         return foundReimbursement;
     }
+
 
     // ***************************************
     //  READ ALL REIMBURSEMENTS

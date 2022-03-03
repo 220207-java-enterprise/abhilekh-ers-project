@@ -30,7 +30,7 @@ public class ReimbursementResponse {
         this.resolved = reimbursement.getResolved();
         this.paymentId = reimbursement.getPaymentId();
         this.author = reimbursement.getAuthor().getUsername();
-        this.resolver = reimbursement.getResolver().getUsername();
+//        this.resolver = reimbursement.getResolver().getUsername();
         this.status = reimbursement.getStatus().getStatus();
         this.type = reimbursement.getType().getType();
     }

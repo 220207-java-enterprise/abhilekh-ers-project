@@ -43,6 +43,28 @@ public class ReimbursementTypeDAO implements CrudDAO{
         return reimbursementType;
     }
 
+
+    public ReimbursementType getByName(String type) {
+        ReimbursementType reimbursementType = null;
+
+        try (Connection conn = ConnectionFactory.getInstance().getConnection()) {
+            PreparedStatement pstmt = conn.prepareStatement(rootSelect + "WHERE type = ?");
+            pstmt.setString(1, type);
+
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                reimbursementType = new ReimbursementType();
+                reimbursementType.setId(rs.getString("id"));
+                reimbursementType.setType(rs.getString("type"));
+            }
+
+        } catch (SQLException e) {
+            throw new DataSourceException(e);
+        }
+
+        return reimbursementType;
+    }
+
     @Override
     public List getAll() {
         return null;

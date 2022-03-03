@@ -7,17 +7,17 @@ public class NewReimbursementRequest {
     private float amount;
     private String description;
     private String authorId;    // todo use jwt to extract id -> in servlet maybe
-    private String typeId;      // todo maybe type name?
+    private String typeName;      // todo maybe type name?
 
     public NewReimbursementRequest(){
 
     }
 
-    public NewReimbursementRequest(float amount, String description, String authorId, String typeId) {
+    public NewReimbursementRequest(float amount, String description, String authorId, String typeName) {
         this.amount = amount;
         this.description = description;
         this.authorId = authorId;
-        this.typeId = typeId;
+        this.typeName = typeName;
     }
 
     public float getAmount() {
@@ -44,16 +44,16 @@ public class NewReimbursementRequest {
         this.authorId = authorId;
     }
 
-    public String getTypeId() {
-        return typeId;
+    public String getTypeName() {
+        return typeName;
     }
 
-    public void setTypeId(String typeId) {
-        this.typeId = typeId;
+    public void setTypeName(String typeName) {
+        this.typeName = typeName;
     }
 
     public Reimbursement extractReimbursement(){
-        return new Reimbursement(amount, description, authorId, typeId);
+        return new Reimbursement(amount, description, authorId, typeName);
     }
 
 

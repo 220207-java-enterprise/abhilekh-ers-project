@@ -5,6 +5,7 @@ import com.revature.app.daos.ReimbursementStatusDAO;
 import com.revature.app.daos.ReimbursementTypeDAO;
 import com.revature.app.daos.UserDAO;
 import com.revature.app.dtos.requests.NewReimbursementRequest;
+import com.revature.app.dtos.responses.GetUserResponse;
 import com.revature.app.dtos.responses.ReimbursementResponse;
 import com.revature.app.models.Reimbursement;
 import com.revature.app.models.ReimbursementType;
@@ -40,37 +41,37 @@ public class ReimbursementService {
     // ***********************************
     public Reimbursement addNewReimbursement(NewReimbursementRequest newReimbursementRequest){
 
-        Reimbursement newReimbursemant = newReimbursementRequest.extractReimbursement();
+        Reimbursement newReimbursement = newReimbursementRequest.extractReimbursement();
 
         // add/change some properties before saving to database
-        newReimbursemant.setId(UUID.randomUUID().toString());
+        newReimbursement.setId(UUID.randomUUID().toString());
 
-        newReimbursemant.setAmount(
+        newReimbursement.setAmount(
                 Float.parseFloat(String.format(
                         String.format("%6.2f", newReimbursementRequest.getAmount()
                 ))));
 
-        newReimbursemant.setStatusId("1");
+        newReimbursement.setStatusId("1");
 
-        ReimbursementType type = reimbursementTypeDAO.getById(newReimbursementRequest.getTypeId());
-        // todo maybe type name would be easier
+        ReimbursementType type = reimbursementTypeDAO.getByName(newReimbursementRequest.getTypeName());
 
-        newReimbursemant.setType(type);
+        newReimbursement.setType(type);
 
-        reimbursementDAO.save(newReimbursemant);
+        reimbursementDAO.save(newReimbursement);
 
-        return newReimbursemant;
+        return newReimbursement;
     }
 
     // ***********************************
     //      GET ALL REIMBURSEMENTS
     // ***********************************
     public List<ReimbursementResponse> getAllReimbursements(){
-        List<Reimbursement> reimbursements = reimbursementDAO.getAll();
-        List<ReimbursementResponse> reimbursementResponses = new ArrayList<>();
-        for (Reimbursement reimbursement : reimbursements){
-            reimbursementResponses.add(new ReimbursementResponse(reimbursement));
-        }
-        return reimbursementResponses;
+        // **********************
+        // MAPPING USING STREAMS        //todo order allUsers using comparable/comparators
+        //***********************
+        return reimbursementDAO.getAll()
+                .stream()
+                .map(ReimbursementResponse::new)
+                .collect(Collectors.toList());
     }
 }

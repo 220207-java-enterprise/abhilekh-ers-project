@@ -34,9 +34,16 @@ public class Reimbursement {
         this.description = description;
         this.authorId = authorId;
         this.typeId = typeId;
-
+//        if (typeName == "LODGING") {
+//            this.typeId = "1";
+//        } else if (typeName == "TRAVEL") {
+//            this.typeId = "2";
+//        } else if (typeName == "TRAVEL") {
+//            this.typeId = "2";
+//        } else if (typeName == "TRAVEL") {
+//            this.typeId = "2";
+//        }
     }
-
     public String getId() {
         return id;
     }
