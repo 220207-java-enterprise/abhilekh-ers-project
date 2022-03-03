@@ -2,18 +2,16 @@ package com.revature.app.dtos.requests;
 
 import com.revature.app.models.Reimbursement;
 
-import java.sql.Timestamp;
-
-public class UpdateMyReimbursementRequest {
+public class ManageMyReimbursementRequest {
 
     private String id;
     private Float amount;
     private String description;
 
 
-    public UpdateMyReimbursementRequest(){}
+    public ManageMyReimbursementRequest(){}
 
-    public UpdateMyReimbursementRequest(String id, Float amount, String description){
+    public ManageMyReimbursementRequest(String id, Float amount, String description){
         this.id = id;
         this.amount = amount.floatValue();
         this.description = description;

@@ -3,7 +3,7 @@ package com.revature.app.servlets;
 import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.app.dtos.requests.NewReimbursementRequest;
-import com.revature.app.dtos.requests.UpdateMyReimbursementRequest;
+import com.revature.app.dtos.requests.ManageMyReimbursementRequest;
 import com.revature.app.dtos.requests.UpdateReimbursementRequest;
 import com.revature.app.dtos.responses.*;
 import com.revature.app.models.Reimbursement;
@@ -155,10 +155,10 @@ public class ReimbursementServlet extends HttpServlet {
             PrintWriter respWriter = resp.getWriter();
 
             try{
-                UpdateMyReimbursementRequest updateMyReimbursementRequest = mapper.readValue(req.getInputStream(),
-                        UpdateMyReimbursementRequest.class);
+                ManageMyReimbursementRequest manageMyReimbursementRequest = mapper.readValue(req.getInputStream(),
+                        ManageMyReimbursementRequest.class);
 
-                Reimbursement extractedReimbursement = updateMyReimbursementRequest.extractReimbursement();
+                Reimbursement extractedReimbursement = manageMyReimbursementRequest.extractReimbursement();
 
 
                 if (!reimbursementService.isAuthorizedToEdit(extractedReimbursement, requester)){
@@ -174,8 +174,8 @@ public class ReimbursementServlet extends HttpServlet {
                     return;
                 }
 
-                Reimbursement reimbursement = reimbursementService.updateMyReimbursement(updateMyReimbursementRequest);
-                String payload = mapper.writeValueAsString(new UpdateMyReimbursementResponse(reimbursement));
+                Reimbursement reimbursement = reimbursementService.manageMyReimbursement(manageMyReimbursementRequest);
+                String payload = mapper.writeValueAsString(new ManageMyReimbursementResponse(reimbursement));
                 resp.setContentType("application/json");
                 respWriter.write(payload);
                 resp.setStatus(200);

@@ -5,7 +5,7 @@ import com.revature.app.models.Reimbursement;
 
 import java.sql.Timestamp;
 
-public class UpdateMyReimbursementResponse {
+public class ManageMyReimbursementResponse {
 
     private String id;
     private Float amount;
@@ -13,9 +13,9 @@ public class UpdateMyReimbursementResponse {
     private Timestamp submitted;
     private String statusName;
 
-    public UpdateMyReimbursementResponse(){}
+    public ManageMyReimbursementResponse(){}
 
-    public UpdateMyReimbursementResponse(Reimbursement reimbursement){
+    public ManageMyReimbursementResponse(Reimbursement reimbursement){
         this.id = reimbursement.getId();
         this.amount = reimbursement.getAmount();
         this.description = reimbursement.getDescription();

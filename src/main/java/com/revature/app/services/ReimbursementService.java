@@ -5,14 +5,12 @@ import com.revature.app.daos.ReimbursementStatusDAO;
 import com.revature.app.daos.ReimbursementTypeDAO;
 import com.revature.app.daos.UserDAO;
 import com.revature.app.dtos.requests.NewReimbursementRequest;
-import com.revature.app.dtos.requests.UpdateMyReimbursementRequest;
+import com.revature.app.dtos.requests.ManageMyReimbursementRequest;
 import com.revature.app.dtos.requests.UpdateReimbursementRequest;
-import com.revature.app.dtos.responses.GetUserResponse;
 import com.revature.app.dtos.responses.Principal;
 import com.revature.app.dtos.responses.ReimbursementResponse;
 import com.revature.app.models.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -108,13 +106,18 @@ public class ReimbursementService {
     // *********************************
     //      UPDATE A REIMBURSEMENT
     // *********************************
-    public Reimbursement updateMyReimbursement(UpdateMyReimbursementRequest updateMyReimbursementRequest){
+    public Reimbursement manageMyReimbursement(ManageMyReimbursementRequest manageMyReimbursementRequest){
 
-        Reimbursement updatedReimbursement = updateMyReimbursementRequest.extractReimbursement();
+        Reimbursement updatedReimbursement = manageMyReimbursementRequest.extractReimbursement();
+
+        if (manageMyReimbursementRequest.getAmount()==null && updatedReimbursement.getDescription()==null){
+            Reimbursement viewReimbursement = reimbursementDAO.getById(manageMyReimbursementRequest.getId());
+            return viewReimbursement;
+        }
 
         updatedReimbursement.setAmount(
                 Float.parseFloat(String.format(
-                        String.format("%6.2f", updateMyReimbursementRequest.getAmount()
+                        String.format("%6.2f", manageMyReimbursementRequest.getAmount()
                         ))));
 
         updatedReimbursement.setStatus(new ReimbursementStatus("1","PENDING"));
