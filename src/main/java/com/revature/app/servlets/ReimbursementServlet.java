@@ -48,11 +48,10 @@ public class ReimbursementServlet extends HttpServlet {
             return;
         }
 
-        List<ReimbursementResponse> reimbursements = reimbursementService.getAllReimbursements();
-        String payload = mapper.writeValueAsString(reimbursements);
+        List<ReimbursementResponse> reimbursementResponses = reimbursementService.getAllReimbursements();
+        String payload = mapper.writeValueAsString(reimbursementResponses);
         resp.setContentType("application/json");
         resp.getWriter().write(payload);
-
         resp.setStatus(200);
     }
 
