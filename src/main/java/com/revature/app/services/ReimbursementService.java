@@ -95,4 +95,44 @@ public class ReimbursementService {
 
         return updatedReimbursement;
     }
+
+    // ************************************
+    //      GET ALL PENDING REIMBURSEMENTS
+    // ************************************
+    public List<ReimbursementResponse> getAllPendingReimbursements(){
+        // **********************
+        // MAPPING USING STREAMS
+        //***********************
+        return reimbursementDAO.getAllPending()
+                .stream()
+                .map(ReimbursementResponse::new)
+                .collect(Collectors.toList());
+    }
+
+    // ************************************
+    //      GET ALL ACCEPTED REIMBURSEMENTS
+    // ************************************
+    public List<ReimbursementResponse> getAllAcceptedReimbursements(){
+        // **********************
+        // MAPPING USING STREAMS
+        //***********************
+        return reimbursementDAO.getAllAccepted()
+                .stream()
+                .map(ReimbursementResponse::new)
+                .collect(Collectors.toList());
+    }
+
+    // ************************************
+    //      GET ALL DENIED REIMBURSEMENTS
+    // ************************************
+    public List<ReimbursementResponse> getAllDeniedReimbursements(){
+        // **********************
+        // MAPPING USING STREAMS
+        //***********************
+        return reimbursementDAO.getAllDenied()
+                .stream()
+                .map(ReimbursementResponse::new)
+                .collect(Collectors.toList());
+    }
+
 }

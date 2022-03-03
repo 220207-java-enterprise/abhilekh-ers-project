@@ -25,7 +25,7 @@ public class ReimbursementDAO implements CrudDAO<Reimbursement> {
             "JOIN reimbursement_statuses rs\n" +
             "ON rmb.status_id = rs.id\n" +
             "JOIN reimbursement_types rt\n" +
-            "ON rmb.type_id = rt.id;";
+            "ON rmb.type_id = rt.id ";
 
     // ***************************************
     //  CREATE A REIMBURSEMENT
@@ -179,9 +179,9 @@ public class ReimbursementDAO implements CrudDAO<Reimbursement> {
     }
 
 
-
-
-    // DELETE
+    // ***************************************
+    //  DELETE A REIMBURSEMENT BY ID
+    // ***************************************
     @Override
     public void deleteById(String id) {
         User deletedUser = null;
@@ -201,4 +201,117 @@ public class ReimbursementDAO implements CrudDAO<Reimbursement> {
         }
 
     }
+
+
+    // ***************************************
+    //  GET ALL PENDING REIMBURSEMENTS
+    // ***************************************
+    public List<Reimbursement> getAllPending(){
+        List<Reimbursement> allPendingReimbursements = new ArrayList<>();
+        Reimbursement onePendingReimbursement = null;
+
+        try (Connection conn = ConnectionFactory.getInstance().getConnection()) {
+
+            ResultSet rs = conn.createStatement().executeQuery(rootSelect + "WHERE rmb.status_id='1'");
+            while(rs.next()) {
+                onePendingReimbursement = new Reimbursement();
+                onePendingReimbursement.setId(rs.getString("id"));
+                onePendingReimbursement.setAmount(rs.getFloat("amount"));
+                onePendingReimbursement.setSubmitted(rs.getTimestamp("submitted"));
+                onePendingReimbursement.setResolved(rs.getTimestamp("resolved"));
+                onePendingReimbursement.setDescription(rs.getString("description"));
+                onePendingReimbursement.setReceipt(rs.getString("receipt"));
+                onePendingReimbursement.setPaymentId(rs.getString("payment_id"));
+                onePendingReimbursement.setAuthor(userDAO.getById(rs.getString("author_id")));
+                onePendingReimbursement.setResolver(userDAO.getById(rs.getString("resolver_id")));
+                onePendingReimbursement.setStatus(new ReimbursementStatus(rs.getString("status_id"),
+                        rs.getString("status")));
+                onePendingReimbursement.setType(new ReimbursementType(rs.getString("type_id"),
+                        rs.getString("type")));
+
+                allPendingReimbursements.add(onePendingReimbursement);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new DataSourceException(e);
+        }
+
+        return allPendingReimbursements;
+    }
+
+    // ***************************************
+    //  GET ALL ACCEPTED REIMBURSEMENTS
+    // ***************************************
+    public List<Reimbursement> getAllAccepted(){
+        List<Reimbursement> allAcceptedReimbursements = new ArrayList<>();
+        Reimbursement oneAcceptedReimbursement = null;
+
+        try (Connection conn = ConnectionFactory.getInstance().getConnection()) {
+
+            ResultSet rs = conn.createStatement().executeQuery(rootSelect + "WHERE rmb.status_id='2'");
+            while(rs.next()) {
+                oneAcceptedReimbursement = new Reimbursement();
+                oneAcceptedReimbursement.setId(rs.getString("id"));
+                oneAcceptedReimbursement.setAmount(rs.getFloat("amount"));
+                oneAcceptedReimbursement.setSubmitted(rs.getTimestamp("submitted"));
+                oneAcceptedReimbursement.setResolved(rs.getTimestamp("resolved"));
+                oneAcceptedReimbursement.setDescription(rs.getString("description"));
+                oneAcceptedReimbursement.setReceipt(rs.getString("receipt"));
+                oneAcceptedReimbursement.setPaymentId(rs.getString("payment_id"));
+                oneAcceptedReimbursement.setAuthor(userDAO.getById(rs.getString("author_id")));
+                oneAcceptedReimbursement.setResolver(userDAO.getById(rs.getString("resolver_id")));
+                oneAcceptedReimbursement.setStatus(new ReimbursementStatus(rs.getString("status_id"),
+                        rs.getString("status")));
+                oneAcceptedReimbursement.setType(new ReimbursementType(rs.getString("type_id"),
+                        rs.getString("type")));
+
+                allAcceptedReimbursements.add(oneAcceptedReimbursement);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new DataSourceException(e);
+        }
+
+        return allAcceptedReimbursements;
+    }
+
+    // ***************************************
+    //  GET ALL DENIED REIMBURSEMENTS
+    // ***************************************
+    public List<Reimbursement> getAllDenied(){
+        List<Reimbursement> allDeniedReimbursements = new ArrayList<>();
+        Reimbursement oneDeniedReimbursement = null;
+
+        try (Connection conn = ConnectionFactory.getInstance().getConnection()) {
+
+            ResultSet rs = conn.createStatement().executeQuery(rootSelect + "WHERE rmb.status_id='3'");
+            while(rs.next()) {
+                oneDeniedReimbursement = new Reimbursement();
+                oneDeniedReimbursement.setId(rs.getString("id"));
+                oneDeniedReimbursement.setAmount(rs.getFloat("amount"));
+                oneDeniedReimbursement.setSubmitted(rs.getTimestamp("submitted"));
+                oneDeniedReimbursement.setResolved(rs.getTimestamp("resolved"));
+                oneDeniedReimbursement.setDescription(rs.getString("description"));
+                oneDeniedReimbursement.setReceipt(rs.getString("receipt"));
+                oneDeniedReimbursement.setPaymentId(rs.getString("payment_id"));
+                oneDeniedReimbursement.setAuthor(userDAO.getById(rs.getString("author_id")));
+                oneDeniedReimbursement.setResolver(userDAO.getById(rs.getString("resolver_id")));
+                oneDeniedReimbursement.setStatus(new ReimbursementStatus(rs.getString("status_id"),
+                        rs.getString("status")));
+                oneDeniedReimbursement.setType(new ReimbursementType(rs.getString("type_id"),
+                        rs.getString("type")));
+
+                allDeniedReimbursements.add(oneDeniedReimbursement);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new DataSourceException(e);
+        }
+
+        return allDeniedReimbursements;
+    }
+
 }

@@ -12,7 +12,6 @@ import com.revature.app.models.Reimbursement;
 import com.revature.app.services.ReimbursementService;
 import com.revature.app.services.TokenService;
 import com.revature.app.util.exceptions.InvalidRequestException;
-import com.revature.app.util.exceptions.ResourceConflictException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -38,6 +37,7 @@ public class ReimbursementServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
+
         Principal requester = tokenService.extractRequesterDetails(req.getHeader("Authorization"));
 
         if (requester == null){
@@ -49,6 +49,41 @@ public class ReimbursementServlet extends HttpServlet {
         if (requester.getRole().equals("EMPLOYEE") || requester.getRole().equals("ADMIN")){
             resp.getWriter().write("Please login as a Finance Manager to see all Reimburements in the system.");
             resp.setStatus(403);
+            return;
+        }
+
+        String[] reqFrags = req.getRequestURI().split("/");
+        if(reqFrags.length==4 && reqFrags[3].equals("pending")){
+
+            List<ReimbursementResponse> reimbursementResponses = reimbursementService.getAllPendingReimbursements();
+            String payload = mapper.writeValueAsString(reimbursementResponses);
+            resp.setContentType("application/json");
+            resp.getWriter().write(payload);
+            resp.setStatus(200);
+
+            return;
+        }
+
+        if(reqFrags.length==4 && reqFrags[3].equals("approved")){
+
+            List<ReimbursementResponse> reimbursementResponses = reimbursementService.getAllAcceptedReimbursements();
+            String payload = mapper.writeValueAsString(reimbursementResponses);
+            resp.setContentType("application/json");
+            resp.getWriter().write(payload);
+            resp.setStatus(200);
+
+            return;
+        }
+
+        if(reqFrags.length==4 && reqFrags[3].equals("denied")){
+            resp.getWriter().write("Pending reimbursements here\n");
+
+            List<ReimbursementResponse> reimbursementResponses = reimbursementService.getAllDeniedReimbursements();
+            String payload = mapper.writeValueAsString(reimbursementResponses);
+            resp.setContentType("application/json");
+            resp.getWriter().write(payload);
+            resp.setStatus(200);
+
             return;
         }
 
