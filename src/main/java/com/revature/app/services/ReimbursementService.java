@@ -5,11 +5,10 @@ import com.revature.app.daos.ReimbursementStatusDAO;
 import com.revature.app.daos.ReimbursementTypeDAO;
 import com.revature.app.daos.UserDAO;
 import com.revature.app.dtos.requests.NewReimbursementRequest;
+import com.revature.app.dtos.requests.UpdateReimbursementRequest;
 import com.revature.app.dtos.responses.GetUserResponse;
 import com.revature.app.dtos.responses.ReimbursementResponse;
-import com.revature.app.models.Reimbursement;
-import com.revature.app.models.ReimbursementType;
-import com.revature.app.models.User;
+import com.revature.app.models.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,7 +53,6 @@ public class ReimbursementService {
         newReimbursement.setStatusId("1");
 
         ReimbursementType type = reimbursementTypeDAO.getByName(newReimbursementRequest.getTypeName());
-
         newReimbursement.setType(type);
 
         reimbursementDAO.save(newReimbursement);
@@ -73,5 +71,28 @@ public class ReimbursementService {
                 .stream()
                 .map(ReimbursementResponse::new)
                 .collect(Collectors.toList());
+    }
+
+    // *********************************
+    //      UPDATE A REIMBURSEMENT
+    // *********************************
+    public Reimbursement updateReimbursement(UpdateReimbursementRequest updateReimbursementRequest){
+
+//        updateReimbursementRequest.setResolverId();
+        Reimbursement updatedReimbursement = reimbursementDAO.getById(updateReimbursementRequest.getId());
+
+        updatedReimbursement.setResolver(userDAO.getById(updateReimbursementRequest.getResolverId()));
+
+        if (updateReimbursementRequest.getStatusName()!=null){
+            if (updateReimbursementRequest.getStatusName().equals("APPROVED")) updatedReimbursement.setStatus(new ReimbursementStatus("2",
+                    "APPROVED"));
+            else if (updateReimbursementRequest.getStatusName().equals("DENIED")) updatedReimbursement.setStatus(new ReimbursementStatus("3",
+                    "DENIED"));
+        }
+
+
+        reimbursementDAO.update(updatedReimbursement);
+
+        return updatedReimbursement;
     }
 }

@@ -3,9 +3,11 @@ package com.revature.app.servlets;
 import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.app.dtos.requests.NewReimbursementRequest;
+import com.revature.app.dtos.requests.UpdateReimbursementRequest;
 import com.revature.app.dtos.responses.Principal;
 import com.revature.app.dtos.responses.ReimbursementResponse;
 import com.revature.app.dtos.responses.ResourceCreationResponse;
+import com.revature.app.dtos.responses.UpdateReimbursementResponse;
 import com.revature.app.models.Reimbursement;
 import com.revature.app.services.ReimbursementService;
 import com.revature.app.services.TokenService;
@@ -39,11 +41,13 @@ public class ReimbursementServlet extends HttpServlet {
         Principal requester = tokenService.extractRequesterDetails(req.getHeader("Authorization"));
 
         if (requester == null){
+            resp.getWriter().write("You are not logged in.");
             resp.setStatus(401);
             return;
         }
 
-        if (requester.getRole().equals("EMPLOYEE")){
+        if (requester.getRole().equals("EMPLOYEE") || requester.getRole().equals("ADMIN")){
+            resp.getWriter().write("Please login as a Finance Manager to see all Reimburements in the system.");
             resp.setStatus(403);
             return;
         }
@@ -62,13 +66,15 @@ public class ReimbursementServlet extends HttpServlet {
         Principal requester = tokenService.extractRequesterDetails(req.getHeader("Authorization"));
 
         if (requester == null){
+            resp.getWriter().write("You are not logged in.");
             resp.setStatus(401);
             return;
         }
         System.out.println(requester);
         System.out.println(requester.getRole().equals("EMPLOYEE"));
         if (!requester.getRole().equals("EMPLOYEE")){
-            resp.setStatus(403);    // not allowed to post reimbursement
+            resp.getWriter().write("Please login as an Employee to make a Reimbursement request for approval.");
+            resp.setStatus(403);
             return;
         }
 
@@ -76,7 +82,7 @@ public class ReimbursementServlet extends HttpServlet {
         PrintWriter respWriter = resp.getWriter();
 
         try {
-            // map JSON request
+
             NewReimbursementRequest newReimbursementRequest = mapper.readValue(req.getInputStream(),
                     NewReimbursementRequest.class);
 
@@ -89,6 +95,7 @@ public class ReimbursementServlet extends HttpServlet {
             String payload = mapper.writeValueAsString(new ResourceCreationResponse(newReimbursement.getId()));
             respWriter.write(payload);
         } catch (InvalidRequestException | DatabindException e){
+            resp.getWriter().write("Please submit a valid Reimbursement request");
             resp.setStatus(400);
         } catch (Exception e){
             e.printStackTrace();
@@ -97,17 +104,41 @@ public class ReimbursementServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPut(HttpServletRequest req, HttpServletResponse resp){
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+
         Principal requester = tokenService.extractRequesterDetails(req.getHeader("Authorization"));
 
         if (requester == null){
+            resp.getWriter().write("You are not logged in.");
             resp.setStatus(401);
             return;
         }
 
         if (!requester.getRole().equals("FINANCE_MANAGER")){
-            resp.setStatus(403);    // not allowed to update reimbursement
+            resp.getWriter().write("Please login as a Finance Manager to update a Reimbursement.");
+            resp.setStatus(403);
             return;
+        }
+
+        PrintWriter respWriter = resp.getWriter();
+
+        try {
+            UpdateReimbursementRequest updateReimbursementRequest =
+                    mapper.readValue(req.getInputStream(),UpdateReimbursementRequest.class);
+
+            updateReimbursementRequest.setResolverId(requester.getId());
+            System.out.println("UPDATE RESOLVER ID --> "+ requester.getId());
+
+            Reimbursement reimbursement = reimbursementService.updateReimbursement(updateReimbursementRequest);
+
+            String payload = mapper.writeValueAsString(new UpdateReimbursementResponse(reimbursement));
+            resp.setContentType("application/json");
+            respWriter.write(payload);
+            resp.setStatus(200);
+
+        } catch (Exception e){
+            e.printStackTrace();
+            resp.setStatus(500);
         }
     }
 }
