@@ -3,11 +3,9 @@ package com.revature.app.servlets;
 import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.app.dtos.requests.NewReimbursementRequest;
+import com.revature.app.dtos.requests.UpdateMyReimbursementRequest;
 import com.revature.app.dtos.requests.UpdateReimbursementRequest;
-import com.revature.app.dtos.responses.Principal;
-import com.revature.app.dtos.responses.ReimbursementResponse;
-import com.revature.app.dtos.responses.ResourceCreationResponse;
-import com.revature.app.dtos.responses.UpdateReimbursementResponse;
+import com.revature.app.dtos.responses.*;
 import com.revature.app.models.Reimbursement;
 import com.revature.app.services.ReimbursementService;
 import com.revature.app.services.TokenService;
@@ -76,8 +74,6 @@ public class ReimbursementServlet extends HttpServlet {
         }
 
         if(reqFrags.length==4 && reqFrags[3].equals("denied")){
-            resp.getWriter().write("Pending reimbursements here\n");
-
             List<ReimbursementResponse> reimbursementResponses = reimbursementService.getAllDeniedReimbursements();
             String payload = mapper.writeValueAsString(reimbursementResponses);
             resp.setContentType("application/json");
@@ -149,31 +145,69 @@ public class ReimbursementServlet extends HttpServlet {
             return;
         }
 
-        if (!requester.getRole().equals("FINANCE_MANAGER")){
-            resp.getWriter().write("Please login as a Finance Manager to update a Reimbursement.");
+        if (requester.getRole().equals("ADMIN")){
+            resp.getWriter().write("Login as Finance Manager to approve/deny Reimbursements\nOR\nLogin as Employee to" +
+                    " edit your reimbursements.");
             resp.setStatus(403);
             return;
+
+        } else if (requester.getRole().equals("EMPLOYEE")){
+            PrintWriter respWriter = resp.getWriter();
+
+            try{
+                UpdateMyReimbursementRequest updateMyReimbursementRequest = mapper.readValue(req.getInputStream(),
+                        UpdateMyReimbursementRequest.class);
+
+                Reimbursement extractedReimbursement = updateMyReimbursementRequest.extractReimbursement();
+
+
+                if (!reimbursementService.isAuthorizedToEdit(extractedReimbursement, requester)){
+                        resp.getWriter().write("You are not authorized to update this reimbursement.");
+                        resp.setStatus(403);
+                        return;
+                }
+
+                //  only allow edit on PENDING reimbursements
+                if (!reimbursementService.getReimbursementById(extractedReimbursement.getId()).getStatus().getId().equals("1")) {
+                    resp.setStatus(403);
+                    respWriter.write("You can only edit Reimbursements that are Pending.");
+                    return;
+                }
+
+                Reimbursement reimbursement = reimbursementService.updateMyReimbursement(updateMyReimbursementRequest);
+                String payload = mapper.writeValueAsString(new UpdateMyReimbursementResponse(reimbursement));
+                resp.setContentType("application/json");
+                respWriter.write(payload);
+                resp.setStatus(200);
+
+                return;
+
+            }catch (Exception e){
+                e.printStackTrace();
+                resp.setStatus(500);
+            }
+        } else if (requester.getRole().equals("FINANCE_MANAGER")){
+            PrintWriter respWriter = resp.getWriter();
+
+            try {
+                UpdateReimbursementRequest updateReimbursementRequest =
+                        mapper.readValue(req.getInputStream(),UpdateReimbursementRequest.class);
+
+                updateReimbursementRequest.setResolverId(requester.getId());
+
+                Reimbursement reimbursement = reimbursementService.updateReimbursement(updateReimbursementRequest);
+
+                String payload = mapper.writeValueAsString(new UpdateReimbursementResponse(reimbursement));
+                resp.setContentType("application/json");
+                respWriter.write(payload);
+                resp.setStatus(200);
+
+            } catch (Exception e){
+                e.printStackTrace();
+                resp.setStatus(500);
+            }
         }
 
-        PrintWriter respWriter = resp.getWriter();
 
-        try {
-            UpdateReimbursementRequest updateReimbursementRequest =
-                    mapper.readValue(req.getInputStream(),UpdateReimbursementRequest.class);
-
-            updateReimbursementRequest.setResolverId(requester.getId());
-            System.out.println("UPDATE RESOLVER ID --> "+ requester.getId());
-
-            Reimbursement reimbursement = reimbursementService.updateReimbursement(updateReimbursementRequest);
-
-            String payload = mapper.writeValueAsString(new UpdateReimbursementResponse(reimbursement));
-            resp.setContentType("application/json");
-            respWriter.write(payload);
-            resp.setStatus(200);
-
-        } catch (Exception e){
-            e.printStackTrace();
-            resp.setStatus(500);
-        }
     }
 }

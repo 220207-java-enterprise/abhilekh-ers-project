@@ -75,7 +75,6 @@ public class ReimbursementDAO implements CrudDAO<Reimbursement> {
             PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM reimbursements WHERE id=?");
             pstmt.setString(1, id);
 
-            System.out.println(pstmt);
 
             ResultSet rs = pstmt.executeQuery();
 
@@ -98,7 +97,6 @@ public class ReimbursementDAO implements CrudDAO<Reimbursement> {
                 ReimbursementType type = reimbursementTypeDAO.getById(rs.getString("type_id"));
                 foundReimbursement.setType(type);
 
-                System.out.println("FOUND REIMBURSEMENT---->  "+foundReimbursement);
             }
 
         } catch (SQLException e) {
@@ -154,8 +152,6 @@ public class ReimbursementDAO implements CrudDAO<Reimbursement> {
     // ***************************************
     @Override
     public void update(Reimbursement updatedReimbursement) {
-
-        System.out.println("UPDATED REIMBURSEMENT--> "+updatedReimbursement);
 
         try (Connection conn = ConnectionFactory.getInstance().getConnection()){
 
@@ -312,6 +308,35 @@ public class ReimbursementDAO implements CrudDAO<Reimbursement> {
         }
 
         return allDeniedReimbursements;
+    }
+
+    // ***************************************
+    //  UPDATE MY REIMBURSEMENT BY ID
+    // ***************************************
+
+    public void updateMy(Reimbursement updatedReimbursement) {
+
+        try (Connection conn = ConnectionFactory.getInstance().getConnection()){
+
+            PreparedStatement pstmt = conn.prepareStatement(
+                    "UPDATE reimbursements SET submitted=?, amount=?, description=?, status_id='1' WHERE" +
+                            " id=?"
+            );
+
+            pstmt.setTimestamp(1, new Timestamp(System.currentTimeMillis()));
+            pstmt.setFloat(2, updatedReimbursement.getAmount());
+            pstmt.setString(3, updatedReimbursement.getDescription());
+            pstmt.setString(4, updatedReimbursement.getId());
+
+            System.out.println(updatedReimbursement);
+            int rowsInserted = pstmt.executeUpdate();
+            if (rowsInserted != 1){
+                throw new ResourcePersistenceException("Failed to update user in database");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
     }
 
 }

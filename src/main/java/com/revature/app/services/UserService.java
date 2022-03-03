@@ -53,7 +53,7 @@ public class UserService {
         // TODO encrypt provided password before storing in the database
 
         newUser.setId(UUID.randomUUID().toString());
-        newUser.setRole(new UserRole("1","EMPLOYEE"));
+        newUser.setRole(new UserRole("3","EMPLOYEE"));
         newUser.setIsActive(false);
         userDAO.save(newUser);
 

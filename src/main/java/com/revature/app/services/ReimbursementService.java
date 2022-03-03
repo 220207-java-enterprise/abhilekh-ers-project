@@ -5,8 +5,10 @@ import com.revature.app.daos.ReimbursementStatusDAO;
 import com.revature.app.daos.ReimbursementTypeDAO;
 import com.revature.app.daos.UserDAO;
 import com.revature.app.dtos.requests.NewReimbursementRequest;
+import com.revature.app.dtos.requests.UpdateMyReimbursementRequest;
 import com.revature.app.dtos.requests.UpdateReimbursementRequest;
 import com.revature.app.dtos.responses.GetUserResponse;
+import com.revature.app.dtos.responses.Principal;
 import com.revature.app.dtos.responses.ReimbursementResponse;
 import com.revature.app.models.*;
 
@@ -61,6 +63,13 @@ public class ReimbursementService {
     }
 
     // ***********************************
+    //      GET ONE REIMBURSEMENT BY ID
+    // ***********************************
+    public Reimbursement getReimbursementById(String id){
+        return reimbursementDAO.getById(id);
+    }
+
+    // ***********************************
     //      GET ALL REIMBURSEMENTS
     // ***********************************
     public List<ReimbursementResponse> getAllReimbursements(){
@@ -73,9 +82,9 @@ public class ReimbursementService {
                 .collect(Collectors.toList());
     }
 
-    // *********************************
-    //      UPDATE A REIMBURSEMENT
-    // *********************************
+    // ***********************************************
+    //      UPDATE A REIMBURSEMENT AS FINANCE MANAGER
+    // ***********************************************
     public Reimbursement updateReimbursement(UpdateReimbursementRequest updateReimbursementRequest){
 
 //        updateReimbursementRequest.setResolverId();
@@ -92,6 +101,25 @@ public class ReimbursementService {
 
 
         reimbursementDAO.update(updatedReimbursement);
+
+        return updatedReimbursement;
+    }
+
+    // *********************************
+    //      UPDATE A REIMBURSEMENT
+    // *********************************
+    public Reimbursement updateMyReimbursement(UpdateMyReimbursementRequest updateMyReimbursementRequest){
+
+        Reimbursement updatedReimbursement = updateMyReimbursementRequest.extractReimbursement();
+
+        updatedReimbursement.setAmount(
+                Float.parseFloat(String.format(
+                        String.format("%6.2f", updateMyReimbursementRequest.getAmount()
+                        ))));
+
+        updatedReimbursement.setStatus(new ReimbursementStatus("1","PENDING"));
+
+        reimbursementDAO.updateMy(updatedReimbursement);
 
         return updatedReimbursement;
     }
@@ -133,6 +161,16 @@ public class ReimbursementService {
                 .stream()
                 .map(ReimbursementResponse::new)
                 .collect(Collectors.toList());
+    }
+
+    // ********************************************************
+    //      IS EMPLOYEE AUTHORIZED TO EDIT THIS REIMBURSEMENT?
+    // ********************************************************
+    public boolean isAuthorizedToEdit(Reimbursement reimbursement, Principal requester){
+        if (reimbursementDAO.getById(reimbursement.getId()).getAuthor().getId().equals(requester.getId())){
+            return true;
+        }
+        return false;
     }
 
 }

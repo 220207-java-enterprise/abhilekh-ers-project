@@ -44,6 +44,13 @@ public class Reimbursement {
 //            this.typeId = "2";
 //        }
     }
+
+    public Reimbursement(String id, Float amount, String description) {
+        this.id = id;
+        this.amount = amount;
+        this.description = description;
+    }
+
     public String getId() {
         return id;
     }
