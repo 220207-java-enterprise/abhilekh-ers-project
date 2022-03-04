@@ -18,7 +18,7 @@ public class JwtConfig {
     // ENCRYPT JWT STRING - obfuscates the encryption alogrithm using SALT
     // **********************************************************************
     // public salt = "inside application.properties";
-    private int expiration = 1 * 60 * 60 * 1000; // # of ms in 1 hour
+    private int expiration = 5 * 60 * 60 * 1000; // # of ms in 1 hour
     private final SignatureAlgorithm sigAlg = SignatureAlgorithm.HS256;
     private Key signingKey;
 

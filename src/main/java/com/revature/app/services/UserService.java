@@ -57,9 +57,7 @@ public class UserService {
 
         // HASH PASSWORD
         String hashed = BCrypt.hashpw(newUser.getPassword(), BCrypt.gensalt());
-        System.out.println(hashed);
         newUser.setPassword(hashed);
-        System.out.println(newUser);
 
         userDAO.save(newUser);
 
@@ -86,10 +84,6 @@ public class UserService {
         }
 
         String potentialUserHashedPass = potentialUser.getPassword();
-        String loginRequestHashedPass = BCrypt.hashpw(loginRequest.getPassword(), BCrypt.gensalt());
-
-//        System.out.println(BCrypt.checkpw(loginRequest.getPassword(), potentialUserHashedPass));
-
 
         if(!BCrypt.checkpw(loginRequest.getPassword(), potentialUserHashedPass)) {
             throw new AuthenticationException();

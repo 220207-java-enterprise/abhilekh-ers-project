@@ -9,6 +9,7 @@ import com.revature.app.util.exceptions.InvalidRequestException;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.mindrot.jbcrypt.BCrypt;
 import org.mockito.Mockito;
 
 import static org.mockito.Mockito.*;
@@ -26,6 +27,7 @@ public class UserServiceTest {
     private UserService sut; //sut = System Under Test
 
     private UserDAO mockUserDao;
+
 
     // to be invoked before each
     @Before
