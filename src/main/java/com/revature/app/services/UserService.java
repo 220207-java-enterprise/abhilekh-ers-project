@@ -81,6 +81,10 @@ public class UserService {
 
         User potentialUser = userDAO.findUserByUsername(username);
 
+        if (potentialUser == null){
+            throw new AuthenticationException();
+        }
+
         String potentialUserHashedPass = potentialUser.getPassword();
         String loginRequestHashedPass = BCrypt.hashpw(loginRequest.getPassword(), BCrypt.gensalt());
 
@@ -88,7 +92,6 @@ public class UserService {
 
 
         if(!BCrypt.checkpw(loginRequest.getPassword(), potentialUserHashedPass)) {
-            System.out.println("PASSWORD DID NOT MATCH");
             throw new AuthenticationException();
         }
 
@@ -137,6 +140,9 @@ public class UserService {
 
         User updatedUser = userDAO.getById(updateUserRequest.getId());
 
+        // IF ADMIN DECIDES TO UPDATE A USER, THEY WILL BE ACTIVE!
+        updatedUser.setIsActive(true);
+
         if (updateUserRequest.getUsername()!=null){
             updatedUser.setUsername(updateUserRequest.getUsername());
         }
@@ -164,6 +170,8 @@ public class UserService {
                     "EMPLOYEE"));
         }
 
+
+
         if (updateUserRequest.getIsActive() == true){
             updatedUser.setIsActive(true);
         } else if (updateUserRequest.getIsActive() == false){
@@ -176,6 +184,16 @@ public class UserService {
         userDAO.update(updatedUser);
 
         return updatedUser;
+    }
+
+
+    // ***********************************
+    //      IS USER ACCOUNT ACTIVE
+    // ***********************************
+    public boolean isUserActive(String id){
+
+        User user = userDAO.getById(id);
+        return user.getIsActive();
     }
 
     // ====================================

@@ -83,7 +83,7 @@ public class UserServlet extends HttpServlet {
             respWriter.write(payload);
 
         } catch (InvalidRequestException | DatabindException e) {
-            e.printStackTrace();
+            resp.getWriter().write("Invalid Request. Data will not persist to database.");
             resp.setStatus(400); // BAD REQUEST
         } catch (ResourceConflictException e) {
             e.printStackTrace();
@@ -128,7 +128,7 @@ public class UserServlet extends HttpServlet {
         }
 
         if (!requester.getRole().equals("ADMIN")){
-            resp.getWriter().write("Please login as Finance Manager to complete this action.");
+            resp.getWriter().write("Please login as Admin to complete this action.");
             resp.setStatus(403); // forbidden
             return;
         }
