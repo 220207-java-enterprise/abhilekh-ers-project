@@ -82,6 +82,9 @@ The PRISM application is another internal system that your expense reimbursement
 
 ## Scoring and Milestones
 
+// ******************************
+//    remove rubric after P1
+// ******************************
 ### Technical Scoring Rubric
 
 | Requirement                                                                                       | Functional/Non-Functional | Value |
