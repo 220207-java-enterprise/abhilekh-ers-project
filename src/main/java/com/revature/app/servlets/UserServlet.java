@@ -10,6 +10,8 @@ import com.revature.app.services.TokenService;
 import com.revature.app.services.UserService;
 import com.revature.app.util.exceptions.InvalidRequestException;
 import com.revature.app.util.exceptions.ResourceConflictException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.mindrot.jbcrypt.BCrypt;
 
 import javax.servlet.ServletException;
@@ -18,11 +20,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Arrays;
 import java.util.List;
 
 
 // Mapping: /users/*
 public class UserServlet extends HttpServlet {
+
+    private static Logger logger = LogManager.getLogger(UserServlet.class);
 
     private final TokenService tokenService;
     private final UserService userService;
@@ -38,22 +43,27 @@ public class UserServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
+        logger.debug("UserServlet#doGet invoked with args: "+ Arrays.asList(req, resp));
+
         String[] reqFrags = req.getRequestURI().split("/");
         if(reqFrags.length==4 && reqFrags[3].equals("availability")){
             System.out.println(BCrypt.hashpw(("p4$$word"),BCrypt.gensalt()));
             checkAvailability(req, resp);
+            logger.debug("UserServlet#doGet returned successfully");
             return;
         }
 
         Principal requester = tokenService.extractRequesterDetails(req.getHeader("Authorization"));
 
         if (requester==null){
+            logger.warn("Unauthenticated request made to UserServlet#doGet");
             resp.getWriter().write("You need to be logged in.");
             resp.setStatus(401); // not logged in
             return;
         }
 
         if (!requester.getRole().equals("ADMIN")){
+            logger.warn("Unauthorized request made by user: "+requester.getUsername());
             resp.getWriter().write("Please login as an admin to complete this action.");
             resp.setStatus(403); // forbidden
             return;
@@ -64,12 +74,15 @@ public class UserServlet extends HttpServlet {
         resp.setContentType("application/json");
         resp.getWriter().write(payload);
 
-        // redeploying will destroy session and it's attributes
+        logger.debug("UserServlet#doGet returned successfully.");
         resp.setStatus(200);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+        logger.debug("UserServlet#doPost invoked with args: "+ Arrays.asList(req, resp));
+
 
         PrintWriter respWriter = resp.getWriter();
 
@@ -83,13 +96,15 @@ public class UserServlet extends HttpServlet {
             respWriter.write(payload);
 
         } catch (InvalidRequestException | DatabindException e) {
+            logger.error(e.getMessage(), e);
             resp.getWriter().write("Invalid Request. Data will not persist to database.");
-            resp.setStatus(400); // BAD REQUEST
+            resp.setStatus(400);
         } catch (ResourceConflictException e) {
-            e.printStackTrace();
-            resp.setStatus(409); // CONFLICT
+            logger.error(e.getMessage(), e);
+            resp.getWriter().write("Resource Conflict has occurred.");
+            resp.setStatus(409);
         } catch (Exception e) {
-            e.printStackTrace(); // include for debugging purposes; ideally log it to a file
+            logger.error(e.getMessage(), e);
             resp.setStatus(500);
         }
 

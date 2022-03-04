@@ -12,6 +12,8 @@ import com.revature.app.services.UserService;
 import com.revature.app.servlets.AuthServlet;
 import com.revature.app.servlets.ReimbursementServlet;
 import com.revature.app.servlets.UserServlet;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
@@ -19,9 +21,11 @@ import javax.servlet.ServletContextListener;
 
 public class ContextLoaderListener implements ServletContextListener {
 
+    private static Logger logger = LogManager.getLogger(ContextLoaderListener.class);
+
     @Override
     public void contextInitialized(ServletContextEvent sce) {
-        System.out.println("Initializing ERS web application");
+        logger.debug("Initializing ERS web application");
 
         // object mapper
         ObjectMapper mapper = new ObjectMapper();
@@ -57,7 +61,7 @@ public class ContextLoaderListener implements ServletContextListener {
 
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
-        System.out.println("Shutting down ERS web application");
+        logger.debug("Shutting down ERS web application");
 
         UserDAO userDAO = new UserDAO();
         UserService userService = new UserService(userDAO);

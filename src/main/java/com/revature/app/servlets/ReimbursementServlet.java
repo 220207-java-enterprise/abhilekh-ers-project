@@ -10,6 +10,8 @@ import com.revature.app.models.Reimbursement;
 import com.revature.app.services.ReimbursementService;
 import com.revature.app.services.TokenService;
 import com.revature.app.util.exceptions.InvalidRequestException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -17,9 +19,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Arrays;
 import java.util.List;
 
 public class ReimbursementServlet extends HttpServlet {
+
+    private static Logger logger = LogManager.getLogger(ReimbursementServlet.class);
 
     private final TokenService tokenService;
     private final ReimbursementService reimbursementService;
@@ -35,16 +40,20 @@ public class ReimbursementServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
+        logger.debug("ReimbursementServlet#doGet invoked with args: "+ Arrays.asList(req, resp));
+
 
         Principal requester = tokenService.extractRequesterDetails(req.getHeader("Authorization"));
 
         if (requester == null){
+            logger.debug("ReimbursementServlet#doGet returned null because requester was not logged in");
             resp.getWriter().write("You are not logged in.");
             resp.setStatus(401);
             return;
         }
 
         if (requester.getRole().equals("EMPLOYEE") || requester.getRole().equals("ADMIN")){
+            logger.debug("ReimbursementServlet#doGet was not invoked by a Finance Manager.");
             resp.getWriter().write("Please login as a Finance Manager to see all Reimburements in the system.");
             resp.setStatus(403);
             return;
@@ -57,6 +66,8 @@ public class ReimbursementServlet extends HttpServlet {
             String payload = mapper.writeValueAsString(reimbursementResponses);
             resp.setContentType("application/json");
             resp.getWriter().write(payload);
+            logger.debug("ReimbursementServlet#doGet returned all Pending Reimbursements successfully.");
+
             resp.setStatus(200);
 
             return;
@@ -68,6 +79,8 @@ public class ReimbursementServlet extends HttpServlet {
             String payload = mapper.writeValueAsString(reimbursementResponses);
             resp.setContentType("application/json");
             resp.getWriter().write(payload);
+            logger.debug("ReimbursementServlet#doGet returned all Approved Reimbursements successfully.");
+
             resp.setStatus(200);
 
             return;
@@ -78,6 +91,7 @@ public class ReimbursementServlet extends HttpServlet {
             String payload = mapper.writeValueAsString(reimbursementResponses);
             resp.setContentType("application/json");
             resp.getWriter().write(payload);
+            logger.debug("ReimbursementServlet#doGet returned all Denied Reimbursements successfully.");
             resp.setStatus(200);
 
             return;
@@ -87,6 +101,9 @@ public class ReimbursementServlet extends HttpServlet {
         String payload = mapper.writeValueAsString(reimbursementResponses);
         resp.setContentType("application/json");
         resp.getWriter().write(payload);
+
+        logger.debug("ReimbursementServlet#doGet returned all Reimbursements successfully.");
+
         resp.setStatus(200);
     }
 
@@ -94,15 +111,16 @@ public class ReimbursementServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
+        logger.debug("ReimbursementServlet#doPost invoked with args: "+ Arrays.asList(req, resp));
+
         Principal requester = tokenService.extractRequesterDetails(req.getHeader("Authorization"));
 
         if (requester == null){
+
             resp.getWriter().write("You are not logged in.");
             resp.setStatus(401);
             return;
         }
-        System.out.println(requester);
-        System.out.println(requester.getRole().equals("EMPLOYEE"));
         if (!requester.getRole().equals("EMPLOYEE")){
             resp.getWriter().write("Please login as an Employee to make a Reimbursement request.");
             resp.setStatus(403);
@@ -124,9 +142,11 @@ public class ReimbursementServlet extends HttpServlet {
             respWriter.write(payload);
             resp.setStatus(201);
         } catch (InvalidRequestException | DatabindException e){
+            logger.error(e.getMessage(), e);
             resp.getWriter().write("Please submit a valid Reimbursement request");
             resp.setStatus(400);
         } catch (Exception e){
+            logger.error(e.getMessage(), e);
             resp.getWriter().write("Something went wrong.");
             resp.setStatus(500);
         }
@@ -134,6 +154,9 @@ public class ReimbursementServlet extends HttpServlet {
 
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+
+        logger.debug("ReimbursementServlet#doPut invoked with args: "+ Arrays.asList(req, resp));
+
 
         Principal requester = tokenService.extractRequesterDetails(req.getHeader("Authorization"));
 
@@ -181,6 +204,7 @@ public class ReimbursementServlet extends HttpServlet {
                 return;
 
             }catch (Exception e){
+                logger.error(e.getMessage(), e);
                 e.printStackTrace();
                 resp.setStatus(500);
             }
@@ -201,6 +225,7 @@ public class ReimbursementServlet extends HttpServlet {
                 resp.setStatus(200);
 
             } catch (Exception e){
+                logger.error(e.getMessage(), e);
                 e.printStackTrace();
                 resp.setStatus(500);
             }
