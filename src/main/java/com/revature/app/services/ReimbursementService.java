@@ -25,6 +25,8 @@ public class ReimbursementService {
 
     private PrismService prismService;
 
+    public ReimbursementService(ReimbursementDAO reimbursementDAO){}
+
     public ReimbursementService(ReimbursementDAO reimbursementDAO,
                                 ReimbursementTypeDAO reimbursementTypeDAO,
                                 ReimbursementStatusDAO reimbursementStatusDAO,

@@ -9,21 +9,17 @@ import com.revature.app.util.exceptions.InvalidRequestException;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.mindrot.jbcrypt.BCrypt;
 import org.mockito.Mockito;
 
 import static org.mockito.Mockito.*;
-import static org.junit.Assert.assertNotNull;
-
 
 // ******************************************************
 //  TEST CLASS SUITE FOR UserService
 //  encapsulates test cases for methods in UserService
 // ******************************************************
+
 public class UserServiceTest {
 
-    // we can access UserService methods
-    // to keep track of
     private UserService sut; //sut = System Under Test
 
     private UserDAO mockUserDao;
@@ -38,8 +34,7 @@ public class UserServiceTest {
 
     @Test
     public void test_isUsernameValid_returnsFalse_givenEmptyString(){
-        // AAA structure for testing:
-        // Arrange
+
         String username ="";
         // Act
         boolean result = sut.isUsernameValid(username);
