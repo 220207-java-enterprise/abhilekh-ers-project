@@ -63,6 +63,8 @@ public class ReimbursementServlet extends HttpServlet {
             logger.debug("ReimbursementServlet#doGet returned all Reimbursements by Employee");
             resp.setStatus(200);
 
+            return;
+
         }
         if(reqFrags.length==4 && reqFrags[3].equals("pending")){
 
