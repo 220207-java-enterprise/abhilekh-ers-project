@@ -345,4 +345,44 @@ public class ReimbursementDAO implements CrudDAO<Reimbursement> {
 
 
 
+    // ******************************************
+    //     GET REIMBURSEMENTS BY USER ID
+    // ******************************************
+
+    public List<Reimbursement> getReimbursementsByUserId(String authorId){
+
+        List<Reimbursement> allUserReimbursements = new ArrayList<>();
+        Reimbursement oneUserReimbursement = null;
+
+        try (Connection conn = ConnectionFactory.getInstance().getConnection()) {
+
+            PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM reimbursements WHERE author_id=?");
+            pstmt.setString(1, authorId);
+
+
+            ResultSet rs = pstmt.executeQuery();
+
+            while(rs.next()) {
+                oneUserReimbursement = new Reimbursement();
+                oneUserReimbursement.setId(rs.getString("id"));
+                oneUserReimbursement.setAmount(rs.getFloat("amount"));
+                oneUserReimbursement.setSubmitted(rs.getTimestamp("submitted"));
+                oneUserReimbursement.setResolved(rs.getTimestamp("resolved"));
+                oneUserReimbursement.setDescription(rs.getString("description"));
+                oneUserReimbursement.setReceipt(rs.getString("receipt"));
+                oneUserReimbursement.setPaymentId(rs.getString("payment_id"));
+                oneUserReimbursement.setAuthor(userDAO.getById(rs.getString("author_id")));
+                oneUserReimbursement.setResolver(userDAO.getById(rs.getString("resolver_id")));
+                oneUserReimbursement.setStatus(reimbursementStatusDAO.getById(rs.getString("status_id")));
+                oneUserReimbursement.setType(reimbursementTypeDAO.getById(rs.getString("type_id")));
+
+                allUserReimbursements.add(oneUserReimbursement);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new DataSourceException(e);
+        }
+
+        return allUserReimbursements;
+    }
 }

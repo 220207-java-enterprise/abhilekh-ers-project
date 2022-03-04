@@ -2,10 +2,7 @@ package com.revature.app.servlets;
 
 import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.revature.app.dtos.requests.NewReimbursementRequest;
-import com.revature.app.dtos.requests.ManageMyReimbursementRequest;
-import com.revature.app.dtos.requests.RecallReimbursementRequest;
-import com.revature.app.dtos.requests.UpdateReimbursementRequest;
+import com.revature.app.dtos.requests.*;
 import com.revature.app.dtos.responses.*;
 import com.revature.app.models.Reimbursement;
 import com.revature.app.services.ReimbursementService;
@@ -43,24 +40,30 @@ public class ReimbursementServlet extends HttpServlet {
 
         logger.debug("ReimbursementServlet#doGet invoked with args: "+ Arrays.asList(req, resp));
 
-
         Principal requester = tokenService.extractRequesterDetails(req.getHeader("Authorization"));
 
-        if (requester == null){
-            logger.debug("ReimbursementServlet#doGet returned null because requester was not logged in");
-            resp.getWriter().write("You are not logged in.");
-            resp.setStatus(401);
-            return;
-        }
-
-        if (requester.getRole().equals("EMPLOYEE") || requester.getRole().equals("ADMIN")){
-            logger.debug("ReimbursementServlet#doGet was not invoked by a Finance Manager.");
-            resp.getWriter().write("Please login as a Finance Manager to see all Reimburements in the system.");
-            resp.setStatus(403);
-            return;
-        }
-
         String[] reqFrags = req.getRequestURI().split("/");
+        if(reqFrags.length==4 && reqFrags[3].equals("byEmployee")){
+
+            GetUserReimbursementRequest getUserReimbursementRequest = mapper.readValue(req.getInputStream(),
+                    GetUserReimbursementRequest.class);
+
+            if (!requester.getId().equals(getUserReimbursementRequest.getAuthorId())){
+                resp.getWriter().write("You cannot view Reimbursements for this Employee");
+                resp.setStatus(403);
+                return;
+            }
+
+            List<ReimbursementResponse> reimbursementResponses =
+                    reimbursementService.getReimbursementsByAuthor(getUserReimbursementRequest);
+
+            String payload = mapper.writeValueAsString(reimbursementResponses);
+            resp.setContentType("application/json");
+            resp.getWriter().write(payload);
+            logger.debug("ReimbursementServlet#doGet returned all Reimbursements by Employee");
+            resp.setStatus(200);
+
+        }
         if(reqFrags.length==4 && reqFrags[3].equals("pending")){
 
             List<ReimbursementResponse> reimbursementResponses = reimbursementService.getAllPendingReimbursements();
@@ -97,6 +100,22 @@ public class ReimbursementServlet extends HttpServlet {
 
             return;
         }
+
+        if (requester == null){
+            logger.debug("ReimbursementServlet#doGet returned null because requester was not logged in");
+            resp.getWriter().write("You are not logged in.");
+            resp.setStatus(401);
+            return;
+        }
+
+        if (requester.getRole().equals("ADMIN")){
+            logger.debug("ReimbursementServlet#doGet was not invoked by a Finance Manager.");
+            resp.getWriter().write("Please login as a Finance Manager to see all or Employee to see your " +
+                    "Reimburements in the system.");
+            resp.setStatus(403);
+            return;
+        }
+
 
         List<ReimbursementResponse> reimbursementResponses = reimbursementService.getAllReimbursements();
         String payload = mapper.writeValueAsString(reimbursementResponses);

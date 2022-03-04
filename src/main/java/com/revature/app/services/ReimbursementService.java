@@ -4,10 +4,7 @@ import com.revature.app.daos.ReimbursementDAO;
 import com.revature.app.daos.ReimbursementStatusDAO;
 import com.revature.app.daos.ReimbursementTypeDAO;
 import com.revature.app.daos.UserDAO;
-import com.revature.app.dtos.requests.NewReimbursementRequest;
-import com.revature.app.dtos.requests.ManageMyReimbursementRequest;
-import com.revature.app.dtos.requests.RecallReimbursementRequest;
-import com.revature.app.dtos.requests.UpdateReimbursementRequest;
+import com.revature.app.dtos.requests.*;
 import com.revature.app.dtos.responses.Principal;
 import com.revature.app.dtos.responses.ReimbursementResponse;
 import com.revature.app.models.*;
@@ -207,4 +204,15 @@ public class ReimbursementService {
         return reimbursement;
     }
 
+
+    // ********************************************************
+    //      GET REIMBURSEMENTS BY AUTHOR_ID
+    // ********************************************************
+    public List<ReimbursementResponse> getReimbursementsByAuthor(GetUserReimbursementRequest getUserReimbursementRequest){
+
+        return reimbursementDAO.getReimbursementsByUserId(getUserReimbursementRequest.getAuthorId())
+                .stream()
+                .map(ReimbursementResponse::new)
+                .collect(Collectors.toList());
+    }
 }
