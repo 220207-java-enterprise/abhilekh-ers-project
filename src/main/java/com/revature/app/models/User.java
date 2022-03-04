@@ -11,25 +11,32 @@ public class User {
     private String givenName;
     private String surname;
     private boolean isActive;
-
     private String roleId;
 
+    private UserRole role;
+
     public User(){
+        super();
+    }
+
+    public User(String username, String givenName, String surname, String roleName){
 
     }
 
-    public User(String id, String username, String email,
+    public User(String username, String email,
                 String password, String givenName, String surname,
                 boolean isActive, String roleId) {
-        this.id = id;
+
         this.username = username;
         this.email = email;
         this.password = password;
         this.givenName = givenName;
         this.surname = surname;
         this.isActive = isActive;
-        // FK
         this.roleId = roleId;
+    }
+
+    public User(String username, String role) {
     }
 
     public String getId() {
@@ -88,12 +95,12 @@ public class User {
         isActive = active;
     }
 
-    public String getRoleId() {
-        return roleId;
+    public UserRole getRole() {
+        return role;
     }
 
-    public void setRoleId(String roleId) {
-        this.roleId = roleId;
+    public void setRole(UserRole role) {
+        this.role = role;
     }
 
     @Override
@@ -101,12 +108,19 @@ public class User {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return isActive == user.isActive && Objects.equals(id, user.id) && Objects.equals(username, user.username) && Objects.equals(email, user.email) && Objects.equals(password, user.password) && Objects.equals(givenName, user.givenName) && Objects.equals(surname, user.surname) && Objects.equals(roleId, user.roleId);
+        return isActive == user.isActive
+                && Objects.equals(id, user.id)
+                && Objects.equals(username, user.username)
+                && Objects.equals(email, user.email)
+                && Objects.equals(password, user.password)
+                && Objects.equals(givenName, user.givenName)
+                && Objects.equals(surname, user.surname)
+                && Objects.equals(role, user.role);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, username, email, password, givenName, surname, isActive, roleId);
+        return Objects.hash(id, username, email, password, givenName, surname, isActive, role);
     }
 
     @Override
@@ -119,7 +133,7 @@ public class User {
                 ", givenName='" + givenName + '\'' +
                 ", surname='" + surname + '\'' +
                 ", isActive=" + isActive +
-                ", roleId='" + roleId + '\'' +
+                ", roleId='" + role + '\'' +
                 '}';
     }
 }

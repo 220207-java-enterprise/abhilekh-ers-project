@@ -1,4 +1,4 @@
 package com.revature.app.services;
 
-public class UserRoleService {
+public class PrismServiceTest {
 }

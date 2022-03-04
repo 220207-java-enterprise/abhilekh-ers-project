@@ -2,42 +2,46 @@ package com.revature.app.models;
 
 import java.sql.Blob;
 import java.sql.Timestamp;
+import java.util.Objects;
 
 public class Reimbursement {
 
     private String id;
-    private float amount;
+    private Float amount;
     private Timestamp submitted;
     private Timestamp resolved;
     private String description;
-    private Blob receipt;
+    private String receipt;
     private String paymentId;
 
     private String authorId;
     private String resolverId;
     private String statusId;
+
     private String typeId;
+    private String typeName;
+
+    private User author;
+    private User resolver;
+    private ReimbursementStatus status;
+    private ReimbursementType type;
 
     public Reimbursement(){
-
     }
 
-    public Reimbursement(float amount, Timestamp submitted,
-                         Timestamp resolved, String description,
-                         Blob receipt, String authorId, String paymentId,
-                         String resolverId, String statusId,
-                         String typeId) {
+
+    public Reimbursement(Float amount, String description, String authorId, String typeId) {
         this.amount = amount;
-        this.submitted = submitted;
-        this.resolved = resolved;
         this.description = description;
-        this.receipt = receipt;
         this.authorId = authorId;
-        // FK
-        this.paymentId = paymentId;
-        this.resolverId = resolverId;
-        this.statusId = statusId;
         this.typeId = typeId;
+    }
+
+    public Reimbursement(String id, Float amount, String description, String typeName) {
+        this.id = id;
+        this.amount = amount;
+        this.description = description;
+        this.typeName = typeName;
     }
 
     public String getId() {
@@ -48,11 +52,11 @@ public class Reimbursement {
         this.id = id;
     }
 
-    public float getAmount() {
+    public Float getAmount() {
         return amount;
     }
 
-    public void setAmount(float amount) {
+    public void setAmount(Float amount) {
         this.amount = amount;
     }
 
@@ -80,11 +84,11 @@ public class Reimbursement {
         this.description = description;
     }
 
-    public Blob getReceipt() {
+    public String getReceipt() {
         return receipt;
     }
 
-    public void setReceipt(Blob receipt) {
+    public void setReceipt(String receipt) {
         this.receipt = receipt;
     }
 
@@ -126,5 +130,81 @@ public class Reimbursement {
 
     public void setTypeId(String typeId) {
         this.typeId = typeId;
+    }
+
+    public User getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(User author) {
+        this.author = author;
+    }
+
+    public User getResolver() {
+        return resolver;
+    }
+
+    public void setResolver(User resolver) {
+        this.resolver = resolver;
+    }
+
+    public ReimbursementStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(ReimbursementStatus status) {
+        this.status = status;
+    }
+
+    public ReimbursementType getType() {
+        return type;
+    }
+
+    public void setType(ReimbursementType type) {
+        this.type = type;
+    }
+
+
+    public String getTypeName() {
+        return typeName;
+    }
+
+    public void setTypeName(String typeName) {
+        this.typeName = typeName;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Reimbursement that = (Reimbursement) o;
+        return Objects.equals(id, that.id) && Objects.equals(amount, that.amount) && Objects.equals(submitted, that.submitted) && Objects.equals(resolved, that.resolved) && Objects.equals(description, that.description) && Objects.equals(receipt, that.receipt) && Objects.equals(paymentId, that.paymentId) && Objects.equals(authorId, that.authorId) && Objects.equals(resolverId, that.resolverId) && Objects.equals(statusId, that.statusId) && Objects.equals(typeId, that.typeId) && Objects.equals(typeName, that.typeName) && Objects.equals(author, that.author) && Objects.equals(resolver, that.resolver) && Objects.equals(status, that.status) && Objects.equals(type, that.type);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, amount, submitted, resolved, description, receipt, paymentId, authorId, resolverId, statusId, typeId, typeName, author, resolver, status, type);
+    }
+
+    @Override
+    public String toString() {
+        return "Reimbursement{" +
+                "id='" + id + '\'' +
+                ", amount=" + amount +
+                ", submitted=" + submitted +
+                ", resolved=" + resolved +
+                ", description='" + description + '\'' +
+                ", receipt='" + receipt + '\'' +
+                ", paymentId='" + paymentId + '\'' +
+                ", authorId='" + authorId + '\'' +
+                ", resolverId='" + resolverId + '\'' +
+                ", statusId='" + statusId + '\'' +
+                ", typeId='" + typeId + '\'' +
+                ", typeName='" + typeName + '\'' +
+                ", author=" + author +
+                ", resolver=" + resolver +
+                ", status=" + status +
+                ", type=" + type +
+                '}';
     }
 }

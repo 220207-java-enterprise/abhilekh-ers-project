@@ -29,7 +29,7 @@ public class UserRoleDAO implements CrudDAO<UserRole> {
             PreparedStatement pstmt = conn.prepareStatement("INSERT INTO user_roles VALUES (?,?)");
 
             pstmt.setString(1, newUserRole.getId());
-            pstmt.setString(2, newUserRole.getRole());
+            pstmt.setString(2, newUserRole.getRoleName());
 
             int rowsInserted = pstmt.executeUpdate();
 
@@ -60,7 +60,7 @@ public class UserRoleDAO implements CrudDAO<UserRole> {
             if (rs.next()) {
                 foundUserRole = new UserRole();
                 foundUserRole.setId(rs.getString("id"));
-                foundUserRole.setRole(rs.getString("role"));
+                foundUserRole.setRoleName(rs.getString("role"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -88,7 +88,7 @@ public class UserRoleDAO implements CrudDAO<UserRole> {
             if (rs.next()) {
                 oneUserRole = new UserRole();
                 oneUserRole.setId(rs.getString("id"));
-                oneUserRole.setRole(rs.getString("role"));
+                oneUserRole.setRoleName(rs.getString("role"));
 
                 allUserRoles.add(oneUserRole);
             }
@@ -109,7 +109,7 @@ public class UserRoleDAO implements CrudDAO<UserRole> {
             PreparedStatement pstmt = conn.prepareStatement(
                     "UPDATE user_roles SET role=? WHERE id=?");
 
-            pstmt.setString(1, updatedUserRole.getRole());
+            pstmt.setString(1, updatedUserRole.getRoleName());
             pstmt.setString(2, updatedUserRole.getId());
 
             int rowsInserted = pstmt.executeUpdate();

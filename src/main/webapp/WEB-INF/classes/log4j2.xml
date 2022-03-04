@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Configuration>
+
+    <Properties>
+        <Property name="logdir">${env:HOME}/dev-logs/abhilekh-ers-app</Property>
+        <Property name="layout">%d [%t] %-5level %logger{36} - %msg%n%throwable</Property>
+    </Properties>
+
+    <Appenders>
+        <Console name="ConsoleAppender" target="SYSTEM_OUT">
+            <PatternLayout pattern="${layout}"/>
+        </Console>
+        <File name="FileAppender" fileName="${logdir}/app.log">
+            <PatternLayout pattern="${layout}"/>
+        </File>
+    </Appenders>
+    <Loggers>
+        <Logger name="FileLogger" level="DEBUG">
+            <AppenderRef ref="FileAppender"/>
+        </Logger>
+        <Root level="DEBUG">
+            <AppenderRef ref="ConsoleAppender"/>
+            <AppenderRef ref="FileAppender"/>
+        </Root>
+    </Loggers>
+</Configuration>

@@ -1,18 +1,20 @@
 package com.revature.app.models;
 
+import java.util.Objects;
+
 public class UserRole {
 
     private String id;
-    private String role;
+    private String roleName;
 
-    // add all users inside a list
 
-    private UserRole(){
-
+    public UserRole(){
+        super();
     }
 
-    private UserRole(String role){
-        this.role = role;
+    public UserRole(String id, String role){
+        this.id=id;
+        this.roleName = role;
     }
 
     public String getId() {
@@ -23,26 +25,32 @@ public class UserRole {
         this.id = id;
     }
 
-    public String getRole() {
-        return role;
+    public String getRoleName() {
+        return roleName;
     }
 
-    public void setRole(String role) {
-        this.role = role;
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UserRole userRole = (UserRole) o;
+        return Objects.equals(id, userRole.id) && Objects.equals(roleName, userRole.roleName);
     }
 
     @Override
     public int hashCode() {
-        return super.hashCode();
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        return super.equals(obj);
+        return Objects.hash(id, roleName);
     }
 
     @Override
     public String toString() {
-        return super.toString();
+        return "UserRole{" +
+                "id='" + id + '\'' +
+                ", role='" + roleName + '\'' +
+                '}';
     }
 }

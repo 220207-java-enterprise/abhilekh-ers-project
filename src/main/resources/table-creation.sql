@@ -36,7 +36,7 @@ create table reimbursements(
 	submitted	TIMESTAMP not null,
 	resolved	TIMESTAMP,
 	description	VARCHAR not null,
-	receipt		BYTEA,
+	receipt		VARCHAR,
 	payment_id	VARCHAR,
 	--FKs
 	author_id	VARCHAR not null,
@@ -57,16 +57,6 @@ alter table reimbursements add constraint "fk_reimbursements_resolver"
 foreign key (resolver_id)
 references users;
 
--- fk between reimbursements table and reimbursement_statuses table 
-alter table reimbursements add constraint "fk_reimbursements_status"
-foreign key (status_id)
-references reimbursement_statuses; 
-
--- fk between reimbursements table and reimbursement_types table 
-alter table reimbursements add constraint "fk_reimbursements_types"
-foreign key (type_id)
-references reimbursement_types 
-
 create table reimbursement_statuses(
 	id			VARCHAR,
 	status		VARCHAR unique,
@@ -80,4 +70,16 @@ create table reimbursement_types(
 	
 	constraint "pk_reimbursement_types" primary key ("id")
 );
+
+-- fk between reimbursements table and reimbursement_statuses table 
+alter table reimbursements add constraint "fk_reimbursements_status"
+foreign key (status_id)
+references reimbursement_statuses; 
+
+-- fk between reimbursements table and reimbursement_types table 
+alter table reimbursements add constraint "fk_reimbursements_types"
+foreign key (type_id)
+references reimbursement_types 
+
+
 

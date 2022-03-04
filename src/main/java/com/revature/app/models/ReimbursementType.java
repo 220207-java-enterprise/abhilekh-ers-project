@@ -1,5 +1,7 @@
 package com.revature.app.models;
 
+import java.util.Objects;
+
 public class ReimbursementType {
 
     private String id;
@@ -9,7 +11,8 @@ public class ReimbursementType {
 
     }
 
-    public ReimbursementType(String type) {
+    public ReimbursementType(String id, String type) {
+        this.id = id;
         this.type = type;
     }
 
@@ -30,17 +33,23 @@ public class ReimbursementType {
     }
 
     @Override
-    public int hashCode() {
-        return super.hashCode();
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ReimbursementType that = (ReimbursementType) o;
+        return Objects.equals(id, that.id) && Objects.equals(type, that.type);
     }
 
     @Override
-    public boolean equals(Object obj) {
-        return super.equals(obj);
+    public int hashCode() {
+        return Objects.hash(id, type);
     }
 
     @Override
     public String toString() {
-        return super.toString();
+        return "ReimbursementType{" +
+                "id='" + id + '\'' +
+                ", type='" + type + '\'' +
+                '}';
     }
 }
