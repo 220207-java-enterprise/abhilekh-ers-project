@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.app.dtos.requests.NewReimbursementRequest;
 import com.revature.app.dtos.requests.ManageMyReimbursementRequest;
+import com.revature.app.dtos.requests.RecallReimbursementRequest;
 import com.revature.app.dtos.requests.UpdateReimbursementRequest;
 import com.revature.app.dtos.responses.*;
 import com.revature.app.models.Reimbursement;
@@ -231,6 +232,57 @@ public class ReimbursementServlet extends HttpServlet {
             }
         }
 
+    }
+
+    @Override
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+
+        Principal requester = tokenService.extractRequesterDetails(req.getHeader("Authorization"));
+
+        if (requester == null) {
+            resp.setStatus(401);
+            return;
+        }
+
+        if (!requester.getRole().equals("EMPLOYEE")) {
+            resp.setStatus(403);
+            return;
+        }
+
+        PrintWriter respWriter = resp.getWriter();
+
+        try {
+            RecallReimbursementRequest recallRequest = mapper.readValue(req.getInputStream(),
+                    RecallReimbursementRequest.class);
+
+            Reimbursement recalledReimbursement = reimbursementService.getReimbursementById(recallRequest.getId());
+
+            if (!requester.getId().equals(recalledReimbursement.getAuthor().getId())){
+                respWriter.write("This Reimbursement does not belong to you. Recall Rejected.");
+                resp.setStatus(403);
+                return;
+            }
+
+            if (!recalledReimbursement.getStatus().getStatus().equals("PENDING")){
+                respWriter.write("You can only recall pending Reimbursements. This one has already been " +
+                        "approved/denied by the Finance Manager");
+                resp.setStatus(403);
+                return;
+            }
+
+            reimbursementService.deleteReimbursementById(recallRequest);
+
+            respWriter.write("Successfully recalled this pending reimbursement.");
+            resp.setStatus(202); // DELETED
+            resp.setContentType("application/json");
+
+        } catch (InvalidRequestException | DatabindException e) {
+            e.printStackTrace();
+            resp.setStatus(400);
+        } catch (Exception e) {
+            e.printStackTrace();
+            resp.setStatus(500);
+        }
 
     }
 }

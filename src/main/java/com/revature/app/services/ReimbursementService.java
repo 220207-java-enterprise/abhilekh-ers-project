@@ -6,6 +6,7 @@ import com.revature.app.daos.ReimbursementTypeDAO;
 import com.revature.app.daos.UserDAO;
 import com.revature.app.dtos.requests.NewReimbursementRequest;
 import com.revature.app.dtos.requests.ManageMyReimbursementRequest;
+import com.revature.app.dtos.requests.RecallReimbursementRequest;
 import com.revature.app.dtos.requests.UpdateReimbursementRequest;
 import com.revature.app.dtos.responses.Principal;
 import com.revature.app.dtos.responses.ReimbursementResponse;
@@ -192,6 +193,18 @@ public class ReimbursementService {
             return true;
         }
         return false;
+    }
+
+
+    // ********************************************************
+    //      DELETE REIMBURSEMENT BY ID
+    // ********************************************************
+    public Reimbursement deleteReimbursementById(RecallReimbursementRequest recallReimbursementRequest){
+        String id = recallReimbursementRequest.getId();
+        Reimbursement reimbursement = reimbursementDAO.getById(id);
+        reimbursementDAO.deleteById(id);
+
+        return reimbursement;
     }
 
 }
