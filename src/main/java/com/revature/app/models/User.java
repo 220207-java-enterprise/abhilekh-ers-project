@@ -36,7 +36,7 @@ public class User {
         this.roleId = roleId;
     }
 
-    public User(String username, String role) {
+    public User(String username, String password) {
     }
 
     public String getId() {

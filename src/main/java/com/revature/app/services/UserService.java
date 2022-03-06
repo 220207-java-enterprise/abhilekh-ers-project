@@ -90,7 +90,6 @@ public class UserService {
         }
 
         User authUser = userDAO.findUserByUsername(username);
-        System.out.println(authUser);
 
         if (authUser == null){
             throw new AuthenticationException();
@@ -112,19 +111,6 @@ public class UserService {
                 .stream()
                 .map(GetUserResponse::new)
                 .collect(Collectors.toList());
-
-        // *******************
-        // PRE JAVA-8 mapping
-        //********************
-
-        /*
-        List<User> users = userDAO.getAll();
-        List<UserResponse> userResponses = new ArrayList<>();
-        for (User user: users){
-            userResponses.add(new UserResponse(user));
-        }
-        return userResponses;
-        */
     }
 
     // ***********************************
@@ -164,15 +150,13 @@ public class UserService {
                     "EMPLOYEE"));
         }
 
-
-
         if (updateUserRequest.getIsActive() == true){
             updatedUser.setIsActive(true);
         } else if (updateUserRequest.getIsActive() == false){
             updatedUser.setIsActive(false);
         }
 
-        // hash password before updating
+
         updatedUser.getPassword();
 
         userDAO.update(updatedUser);
