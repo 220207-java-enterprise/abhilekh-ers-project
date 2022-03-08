@@ -25,10 +25,6 @@ public class UserService {
     private UserDAO userDAO;
     private PrismService prismService;
 
-    // @Autowired - // setter injection
-    public void setUserDAO(UserDAO userDAO){
-        this.userDAO = userDAO;
-    }
 
     // @Autowired - // constructor injection
     public UserService(UserDAO userDAO){
