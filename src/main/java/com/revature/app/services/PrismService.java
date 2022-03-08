@@ -1,6 +1,7 @@
 package com.revature.app.services;
 
 import com.revature.app.models.User;
+import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -14,6 +15,7 @@ import java.nio.charset.StandardCharsets;
 
 // WATCH LECTURE
 // 2-23-22 02:18:45PM -- LAST 5 MINUTES FOR BETTER UNDERSTANDING
+@Service
 public class PrismService {
     public void registerNewOrganizationUsingPrism(){
 

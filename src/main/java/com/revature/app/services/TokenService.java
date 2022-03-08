@@ -7,6 +7,7 @@ import com.revature.app.util.exceptions.InvalidRequestException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
+import org.springframework.stereotype.Service;
 
 import java.util.Date;
 
@@ -15,6 +16,7 @@ import java.util.Date;
 // GENERATING AND VALIDATING TOKENS
 // *********************************
 
+@Service
 public class TokenService {
 
     JwtConfig jwtConfig;

@@ -3,6 +3,7 @@ package com.revature.app.daos;
 import com.revature.app.models.ReimbursementType;
 import com.revature.app.util.ConnectionFactory;
 import com.revature.app.util.exceptions.DataSourceException;
+import org.springframework.stereotype.Repository;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -10,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
+@Repository
 public class ReimbursementTypeDAO implements CrudDAO{
 
     private final String rootSelect = "SELECT * FROM reimbursement_types ";

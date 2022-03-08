@@ -5,7 +5,6 @@ import com.revature.app.daos.ReimbursementDAO;
 import com.revature.app.daos.ReimbursementStatusDAO;
 import com.revature.app.daos.ReimbursementTypeDAO;
 import com.revature.app.daos.UserDAO;
-import com.revature.app.models.Reimbursement;
 import com.revature.app.services.ReimbursementService;
 import com.revature.app.services.TokenService;
 import com.revature.app.services.UserService;

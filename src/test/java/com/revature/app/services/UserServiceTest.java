@@ -7,9 +7,7 @@ import com.revature.app.dtos.requests.NewUserRequest;
 import com.revature.app.dtos.requests.UpdateUserRequest;
 import com.revature.app.dtos.responses.GetUserResponse;
 import com.revature.app.models.User;
-import com.revature.app.util.exceptions.AuthenticationException;
 import com.revature.app.util.exceptions.InvalidRequestException;
-import com.revature.app.util.exceptions.ResourceConflictException;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,7 +16,6 @@ import org.mockito.Mockito;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.mockito.Mockito.*;
 

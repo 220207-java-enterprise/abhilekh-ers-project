@@ -2,6 +2,7 @@ package com.revature.app.util;
 
 
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.stereotype.Component;
 
 import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.DatatypeConverter;
@@ -12,6 +13,7 @@ import java.util.Properties;
 // **************************
 //  HANDLES TOKEN GENERATION
 // **************************
+@Component
 public class JwtConfig {
 
     //***********************************************************************

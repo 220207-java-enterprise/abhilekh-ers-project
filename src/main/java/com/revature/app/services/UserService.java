@@ -11,19 +11,30 @@ import com.revature.app.util.exceptions.AuthenticationException;
 import com.revature.app.util.exceptions.InvalidRequestException;
 import com.revature.app.util.exceptions.ResourceConflictException;
 import org.mindrot.jbcrypt.BCrypt;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+@Service
 public class UserService {
 
+    //@Autowired - // field injection
     private UserDAO userDAO;
     private PrismService prismService;
 
+    // @Autowired - // setter injection
+    public void setUserDAO(UserDAO userDAO){
+        this.userDAO = userDAO;
+    }
+
+    // @Autowired - // constructor injection
     public UserService(UserDAO userDAO){
         this.userDAO = userDAO;
     }
+
 
     // ====================================
     //      AUTHORIZATION METHODS

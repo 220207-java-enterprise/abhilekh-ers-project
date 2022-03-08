@@ -6,6 +6,7 @@ import com.revature.app.models.UserRole;
 import com.revature.app.util.ConnectionFactory;
 import com.revature.app.util.exceptions.DataSourceException;
 import com.revature.app.util.exceptions.ResourcePersistenceException;
+import org.springframework.stereotype.Repository;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -14,6 +15,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+@Repository
 public class UserDAO  implements CrudDAO<User>{
 
     private final String rootSelect =

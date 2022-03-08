@@ -4,11 +4,13 @@ import com.revature.app.models.*;
 import com.revature.app.util.ConnectionFactory;
 import com.revature.app.util.exceptions.DataSourceException;
 import com.revature.app.util.exceptions.ResourcePersistenceException;
+import org.springframework.stereotype.Repository;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Repository
 public class ReimbursementDAO implements CrudDAO<Reimbursement> {
 
     //=============================================================================================================

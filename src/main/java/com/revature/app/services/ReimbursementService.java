@@ -9,11 +9,13 @@ import com.revature.app.dtos.responses.Principal;
 import com.revature.app.dtos.responses.ReimbursementResponse;
 import com.revature.app.models.*;
 import com.revature.app.util.exceptions.InvalidRequestException;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+@Service
 public class ReimbursementService {
 
     private ReimbursementDAO reimbursementDAO;
