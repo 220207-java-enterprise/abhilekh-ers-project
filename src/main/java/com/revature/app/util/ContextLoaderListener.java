@@ -1,6 +1,7 @@
 package com.revature.app.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.revature.app.config.AppConfig;
 import com.revature.app.daos.ReimbursementDAO;
 import com.revature.app.daos.ReimbursementStatusDAO;
 import com.revature.app.daos.ReimbursementTypeDAO;
@@ -13,6 +14,9 @@ import com.revature.app.servlets.ReimbursementServlet;
 import com.revature.app.servlets.UserServlet;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
@@ -20,29 +24,25 @@ import javax.servlet.ServletContextListener;
 
 public class ContextLoaderListener implements ServletContextListener {
 
+    // IoC Container
+    ApplicationContext appContext;
+
     private static Logger logger = LogManager.getLogger(ContextLoaderListener.class);
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         logger.debug("Initializing ERS web application");
 
+        appContext = new AnnotationConfigApplicationContext(AppConfig.class);
+
         // object mapper
         ObjectMapper mapper = new ObjectMapper();
 
-        // token classes
-        JwtConfig jwtConfig = new JwtConfig();
-        TokenService tokenService = new TokenService(jwtConfig);
+        // manually grabbing beans to pass to servlets
+        TokenService tokenService = appContext.getBean(TokenService.class);
+        UserService userService = appContext.getBean(UserService.class);
 
-        // wiring together dao, service, servlets
-        UserDAO userDAO = new UserDAO();
-        UserService userService = new UserService(userDAO);
-
-        ReimbursementDAO reimbursementDAO = new ReimbursementDAO();
-        ReimbursementTypeDAO reimbursementTypeDAO = new ReimbursementTypeDAO();
-        ReimbursementStatusDAO reimbursementStatusDAO = new ReimbursementStatusDAO();
-
-        ReimbursementService reimbursementService = new ReimbursementService(
-                reimbursementDAO, reimbursementTypeDAO, reimbursementStatusDAO, userDAO);
+        ReimbursementService reimbursementService = appContext.getBean(ReimbursementService.class);
 
 
         // servlets
