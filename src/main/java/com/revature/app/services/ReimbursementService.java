@@ -161,11 +161,11 @@ public class ReimbursementService {
     // ************************************
     //      GET ALL ACCEPTED REIMBURSEMENTS
     // ************************************
-    public List<ReimbursementResponse> getAllAcceptedReimbursements(){
+    public List<ReimbursementResponse> getAllApprovedReimbursements(){
         // **********************
         // MAPPING USING STREAMS
         //***********************
-        return reimbursementDAO.getAllAccepted()
+        return reimbursementDAO.getAllApproved()
                 .stream()
                 .map(ReimbursementResponse::new)
                 .collect(Collectors.toList());

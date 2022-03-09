@@ -241,7 +241,7 @@ public class ReimbursementDAO implements CrudDAO<Reimbursement> {
     // ***************************************
     //  GET ALL ACCEPTED REIMBURSEMENTS
     // ***************************************
-    public List<Reimbursement> getAllAccepted(){
+    public List<Reimbursement> getAllApproved(){
         List<Reimbursement> allAcceptedReimbursements = new ArrayList<>();
         Reimbursement oneAcceptedReimbursement = null;
 

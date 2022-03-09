@@ -198,7 +198,6 @@ public class UserServiceTest {
         when(mockUserDao.findUserByUsername(username)).thenReturn(new User());
         when(mockUserDao.findUserByEmail(email)).thenReturn(new User());
 
-        doNothing().when(mockUserDao).save(duplicateUserToSave);
 
         try {
             spiedSut.register(duplicateUserRequest);

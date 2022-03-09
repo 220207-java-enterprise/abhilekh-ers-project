@@ -81,7 +81,7 @@ public class ReimbursementServlet extends HttpServlet {
 
         if(reqFrags.length==4 && reqFrags[3].equals("approved")){
 
-            List<ReimbursementResponse> reimbursementResponses = reimbursementService.getAllAcceptedReimbursements();
+            List<ReimbursementResponse> reimbursementResponses = reimbursementService.getAllApprovedReimbursements();
             String payload = mapper.writeValueAsString(reimbursementResponses);
             resp.setContentType("application/json");
             resp.getWriter().write(payload);

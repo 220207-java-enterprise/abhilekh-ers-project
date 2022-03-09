@@ -56,5 +56,13 @@ public class NewReimbursementRequest {
         return new Reimbursement(amount, description, authorId, typeName);
     }
 
-
+    @Override
+    public String toString() {
+        return "NewReimbursementRequest{" +
+                "amount=" + amount +
+                ", description='" + description + '\'' +
+                ", authorId='" + authorId + '\'' +
+                ", typeName='" + typeName + '\'' +
+                '}';
+    }
 }
