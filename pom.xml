@@ -79,6 +79,12 @@
             <version>5.3.8</version>
         </dependency>
 
+<!--        add dependencies for
+        spring-boot-starter-parent,
+        spring-boot-starter-web,
+        spring-boot-starter-data-jpa
+-->
+
 
     </dependencies>
 

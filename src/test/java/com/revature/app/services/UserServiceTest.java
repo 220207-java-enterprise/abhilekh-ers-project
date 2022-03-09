@@ -8,6 +8,7 @@ import com.revature.app.dtos.requests.UpdateUserRequest;
 import com.revature.app.dtos.responses.GetUserResponse;
 import com.revature.app.models.User;
 import com.revature.app.util.exceptions.InvalidRequestException;
+import com.revature.app.util.exceptions.ResourceConflictException;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -159,7 +160,6 @@ public class UserServiceTest {
         Assert.assertFalse(result);
     }
 
-
     @Test
     public void test_isValidUser_givenValidUser(){
         //Arrange
@@ -181,6 +181,30 @@ public class UserServiceTest {
         boolean result = sut.isUsernameAvailable(username);
 
         Assert.assertFalse(result);
+    }
+
+    @Test(expected = ResourceConflictException.class)
+    public void test_registration_throwsResourceConflictException_givenDuplicateUsernameAndEmail(){
+
+        UserService spiedSut = Mockito.spy(sut);
+        NewUserRequest duplicateUserRequest = new NewUserRequest("4bhilekh", "abhilekh390@revature.net", "p4$$word",
+                "Abhilekh", "Adhikari");
+
+        User duplicateUserToSave = duplicateUserRequest.extractUser();
+
+        String username = duplicateUserToSave.getUsername();
+        String email = duplicateUserToSave.getEmail();
+
+        when(mockUserDao.findUserByUsername(username)).thenReturn(new User());
+        when(mockUserDao.findUserByEmail(email)).thenReturn(new User());
+
+        doNothing().when(mockUserDao).save(duplicateUserToSave);
+
+        try {
+            spiedSut.register(duplicateUserRequest);
+        } finally {
+            verify(mockUserDao, times(0)).save(duplicateUserToSave);
+        }
     }
 
     @Test(expected = RuntimeException.class)
