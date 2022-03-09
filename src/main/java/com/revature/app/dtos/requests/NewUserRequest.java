@@ -30,6 +30,10 @@ public class NewUserRequest {
         this.roleId = roleId;
     }
 
+    // constructor for testing
+    public NewUserRequest(String username, String s, String p4$$word, String john, String doe) {
+    }
+
     public String getUsername() {
         return username;
     }
