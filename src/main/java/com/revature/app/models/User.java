@@ -12,6 +12,7 @@ public class User {
     private String surname;
     private boolean isActive;
     private String roleId;
+    private String roleName;
 
     private UserRole role;
 
@@ -20,7 +21,10 @@ public class User {
     }
 
     public User(String username, String givenName, String surname, String roleName){
-
+        this.username = username;
+        this.givenName = givenName;
+        this.surname = surname;
+        this.roleName = roleName;
     }
 
     public User(String username, String email,

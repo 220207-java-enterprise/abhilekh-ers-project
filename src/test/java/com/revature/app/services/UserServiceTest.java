@@ -183,28 +183,30 @@ public class UserServiceTest {
         Assert.assertFalse(result);
     }
 
-//    @Test(expected = ResourceConflictException.class)
-//    public void test_registration_throwsResourceConflictException_givenDuplicateUsernameAndEmail(){
-//
-//        UserService spiedSut = Mockito.spy(sut);
-//        NewUserRequest duplicateUserRequest = new NewUserRequest("4bhilekh", "abhilekh390@revature.net", "p4$$word",
-//                "Abhilekh", "Adhikari");
-//
-//        User duplicateUserToSave = duplicateUserRequest.extractUser();
-//
-//        String username = duplicateUserToSave.getUsername();
-//        String email = duplicateUserToSave.getEmail();
-//
-//        when(mockUserDao.findUserByUsername(username)).thenReturn(new User());
-//        when(mockUserDao.findUserByEmail(email)).thenReturn(new User());
-//
-//
-//        try {
-//            spiedSut.register(duplicateUserRequest);
-//        } finally {
-//            verify(mockUserDao, times(0)).save(duplicateUserToSave);
-//        }
-//    }
+    @Test(expected = ResourceConflictException.class)
+    public void test_registration_throwsResourceConflictException_givenDuplicateUsernameAndEmail(){
+
+        UserService spiedSut = Mockito.spy(sut);
+        NewUserRequest duplicateUserRequest = new NewUserRequest("4bhilekh", "abhilekh390@revature.net", "p4$$word",
+                "Abhilekh", "Adhikari");
+
+        User duplicateUserToSave = duplicateUserRequest.extractUser();
+        System.out.println(duplicateUserRequest);
+        System.out.println(duplicateUserToSave);
+
+        String username = duplicateUserToSave.getUsername();
+        String email = duplicateUserToSave.getEmail();
+
+        when(mockUserDao.findUserByUsername(username)).thenReturn(new User());
+        when(mockUserDao.findUserByEmail(email)).thenReturn(new User());
+
+
+        try {
+            spiedSut.register(duplicateUserRequest);
+        } finally {
+            verify(mockUserDao, times(0)).save(duplicateUserToSave);
+        }
+    }
 
     @Test(expected = RuntimeException.class)
     public void test_registration_throwsRuntimeException_givenInvalidUser(){
@@ -224,32 +226,31 @@ public class UserServiceTest {
         }
     }
 
-//    @Test
-//    public void test_registration_givenValidUser(){
-//        //Arrange
-//        NewUserRequest newUserRequest = new NewUserRequest("username", "email@email.com", "p4$$word", "john", "doe");
-//
-//        User validUser = newUserRequest.extractUser();
-//
-//        UserService spiedSut = Mockito.spy(sut);
-//        when(spiedSut.isUsernameValid(validUser.getUsername())).thenReturn(true);
-//        when(spiedSut.isPasswordValid(validUser.getPassword())).thenReturn(true);
-//        when(spiedSut.isEmailValid(validUser.getEmail())).thenReturn(true);
-//        when(spiedSut.isValidUser(validUser)).thenReturn(true);
-//
-//        doNothing().when(mockUserDao).save(validUser);
-//
-//        User registerResult = spiedSut.register(newUserRequest);
-//
-//        Assert.assertNotNull(registerResult);
-//    }
+    @Test
+    public void test_registration_givenValidUser(){
+        //Arrange
+        NewUserRequest newUserRequest = new NewUserRequest("username", "email@email.com", "p4$$word", "john", "doe");
+
+        User validUser = newUserRequest.extractUser();
+
+        UserService spiedSut = Mockito.spy(sut);
+        when(spiedSut.isUsernameValid(validUser.getUsername())).thenReturn(true);
+        when(spiedSut.isPasswordValid(validUser.getPassword())).thenReturn(true);
+        when(spiedSut.isEmailValid(validUser.getEmail())).thenReturn(true);
+        when(spiedSut.isValidUser(validUser)).thenReturn(true);
+
+        doNothing().when(mockUserDao).save(validUser);
+
+        User registerResult = spiedSut.register(newUserRequest);
+
+        Assert.assertNotNull(registerResult);
+    }
 
     @Test
     public void test_login_returnsAuthenticatedAppUser_givenValidAndKnownCredentials(){
 
         //Arrange
         LoginRequest loginRequest = new LoginRequest("4bhilekh", "p4$$word");
-        String hashedPassword = BCrypt.hashpw(loginRequest.getPassword(), BCrypt.gensalt());
         UserService spiedSut = Mockito.spy(sut);
         String username =  loginRequest.getUsername();
         String password = loginRequest.getPassword();

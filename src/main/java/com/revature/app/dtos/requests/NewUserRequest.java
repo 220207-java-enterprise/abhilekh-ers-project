@@ -31,7 +31,12 @@ public class NewUserRequest {
     }
 
     // constructor for testing
-    public NewUserRequest(String username, String s, String p4$$word, String john, String doe) {
+    public NewUserRequest(String username, String email, String password, String givenName, String surname) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.givenName = givenName;
+        this.surname = surname;
     }
 
     public String getUsername() {
